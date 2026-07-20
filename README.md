@@ -64,7 +64,7 @@ You can invoke these specialized commands directly in the chat window:
 | :--- | :--- |
 | **`/get-context`** | Reads `AGENTS.md`, `task.md`, `tasks/README.md`, `.agents/GDD/`, and inspects the live **Roblox Studio Explorer tree** (ReplicatedStorage, ServerScriptService, StarterPlayerScripts) via MCP to synthesize a complete 360° overview of codebase, live Studio state, and active next steps. |
 | **`/init-project`** | Executes `.agents/scripts/init-project.luau` inside your open Roblox Studio session via MCP (`execute_luau`), programmatically building the native folder and script tree in Roblox Studio Explorer. |
-| **`/gdd [file | text]`** | Parses unstructured game design notes/drafts and maps them into the modular `.agents/GDD/` Knowledge Base (creating domain folders, config table blueprints, and component specs automatically). |
+| **`/gdd [file \| text]`** | Parses unstructured game design notes/drafts and maps them into the modular `.agents/GDD/` Knowledge Base (creating domain folders, config table blueprints, and component specs automatically). |
 | **`/task`** | Analyzes GDD specifications to generate an ordered, file-based task roadmap (`tasks/XXX-name.md`) wrapped in Agile User Stories (*As a / I want to / So that*) with extreme technical specifications. Reconciles task status and executes step-by-step upon prompt (*"Kerjakan task 001"*). |
 
 ---
