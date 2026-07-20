@@ -1,3 +1,8 @@
+---
+name: gdd
+description: Parses unstructured game design drafts and maps them into the modular .agents/GDD/ Knowledge Base.
+---
+
 # Workflow: GDD Knowledge Base Parsing & Formatter (`/gdd`)
 
 > [!NOTE]

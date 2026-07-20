@@ -1,3 +1,8 @@
+---
+name: init-project
+description: Scaffolds the bootstrapped Roblox framework tree directly inside the open Roblox Studio session via MCP.
+---
+
 # Workflow: Native Roblox Studio Framework Scaffolding (`/init-project`)
 
 > [!NOTE]

@@ -1,3 +1,8 @@
+---
+name: create-feature
+description: Outlines the step-by-step procedure for creating a new game system or feature in the framework.
+---
+
 # Workflow: Creating a New Feature
 
 This workflow outlines the step-by-step procedure the coding agent must follow when creating a new game system or feature in the Roblox Vibescoding Framework.

@@ -1,3 +1,8 @@
+---
+name: task
+description: Generates, reconciles, and executes file-based tasks from GDD specifications.
+---
+
 # Workflow: File-Based Task Generation & Execution Engine (`/task`)
 
 > [!NOTE]

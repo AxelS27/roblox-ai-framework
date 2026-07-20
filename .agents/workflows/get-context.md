@@ -1,3 +1,8 @@
+---
+name: get-context
+description: Synchronize workspace context, live Roblox Studio game tree, task index, and GDD knowledge base.
+---
+
 # Workflow: Synchronizing Workspace & Roblox Studio Context (`/get-context`)
 
 > [!NOTE]
