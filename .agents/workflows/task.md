@@ -29,7 +29,7 @@ graph TD
     I --> J["2. Preserve Completed Tasks History"]
     J --> K["3. Update To Do Section & Task Files"]
     
-    L["User Prompts: 'Kerjakan task XXX'"] --> M["Execution Mode"]
+    L["User Prompts: 'Execute task XXX'"] --> M["Execution Mode"]
     M --> N["1. Mark Task 'In Progress'"]
     N --> O["2. Read Task Requirements & Execute Code Edits"]
     O --> P["3. Verify via Tests / Playtest Scripts"]
@@ -55,8 +55,8 @@ graph TD
   2. Compare pending `🔴 To Do` tasks against new GDD specifications.
   3. Update existing task files or append new task files (`tasks/XXX-name.md`) to reflect the new scope.
 
-### Mode 3: Task Execution (*"Kerjakan task XXX"*)
-* **Trigger**: User prompts in chat: *"Kerjakan task 001"* or *"Do task 002"*.
+### Mode 3: Task Execution (*"Execute task XXX"*)
+* **Trigger**: User prompts in chat: *"Execute task 001"* or *"Run task 002"*.
 * **Procedure**:
   1. **Update Status to In Progress**: Mark status to `🟡 In Progress` in `tasks/README.md` and `tasks/XXX-name.md`.
   2. **Read Task Requirements**: Read the target task file completely.

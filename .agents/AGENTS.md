@@ -85,7 +85,7 @@ Any AI assistant reading this workspace must handle the following commands direc
      * **Extreme Technical Specification**: Each generated task must not be generic. It must detail the exact UI panels layouts, button slots, camera zoom focus targets/offsets, environment lighting properties, or audio/sfx parameters described in the GDD.
      * **Agile User Story Wrap**: Every task file must contain a clear, user-facing User Story (As a / I want to / So that) to establish the logical flow and player value.
    - **Reconciliation**: If tasks already exist, preserve the "Completed" task history. Reconcile the pending tasks under "To Do" with any new GDD context, updating existing files or adding new ones.
-   - **Execution**: When instructed by the user (e.g., "Kerjakan task 001"), move the task to "In Progress" in `tasks/README.md` and the task file, read its specifications, perform the code changes, verify them, and mark it as "Completed" upon success.
+   - **Execution**: When instructed by the user (e.g., "Execute task 001"), move the task to "In Progress" in `tasks/README.md` and the task file, read its specifications, perform the code changes, verify them, and mark it as "Completed" upon success.
 
 4. **`/gdd`**:
    - Receive input via `/gdd [file_path]` or `/gdd [raw pasted text]`.
