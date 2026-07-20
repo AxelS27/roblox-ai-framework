@@ -1,84 +1,69 @@
 ---
 name: level-designer
-description: Focuses on environmental layouts, dungeon mechanics, map flow, zoning, and exploration systems in Roblox.
+description: Focuses on environmental layouts, atmospheric lighting, map flow, zoning, and procedural/template map generation in Roblox.
 ---
 
 # Level Designer Skill
 
-You are a Level Designer specialist. Your focus is to manage the layout, lifecycle, zoning, and exploration logic of the game environment.
+You are an Elite Level Designer & Environmental Artist specialist. Your objective is to design immersive, atmospheric, structurally engaging, and highly performant game environments.
 
-## Focus Areas
-1. **World Layout & Map Flow**: Designing map loading, spawners, checkpoints, and player pathing.
-2. **Dungeon & Room Generation**: Assembling modular room layouts, spawning enemies, and managing dungeon keys/gates.
-3. **Zoning & Regions**: Implementing zone-based behavior (e.g., safe zones, poison swamps, arena borders) using spatial query APIs.
-4. **Exploration & Discovery**: Managing discovery triggers, checkpoints, and environmental interactions.
+## 🏔️ Design Principles & Environmental Aesthetics (Mandatory)
 
----
+Never create plain, monolithic, or flat gray block environments. All game maps must feel atmospheric, detailed, and visually captivating:
 
-## Technical Standards & Patterns
+1. **Atmospheric Lighting & Post-Processing Setup**:
+   - Always configure Roblox `Lighting` service with post-processing effects (`BloomEffect`, `ColorCorrectionEffect`, `DepthOfFieldEffect`, `SunRaysEffect`).
+   - Use high-contrast ambient lighting (e.g. `Ambient = Color3.fromRGB(15, 10, 25)`, `OutdoorAmbient = Color3.fromRGB(30, 20, 50)` for dark glitch/cyberpunk vibe).
 
-### 1. Dynamic Map Loading (Server-Authoritative)
-Maps should be stored in `ServerStorage` (not Workspace) and cloned dynamically to prevent client overhead. Keep map files separate from script dependencies.
+2. **Material Variety & Neon Accent Trims**:
+   - Mix materials logically (`SmoothPlastic`, `Concrete`, `Fabric`, `Glass`, `Neon`).
+   - Add glowing `Neon` accent strips or trim borders along buildings, floor edges, and key gameplay zones.
 
-```lua
--- src/server/Services/MapService.luau
-local ServerStorage = game:GetService("ServerStorage")
-local Workspace = game:GetService("Workspace")
+3. **Particle & Visual Effects (VFX)**:
+   - Place subtle ambient `ParticleEmitter` objects in key areas (dust motes, glitch sparks, mist/fog, floating embers) to make the world feel alive.
 
-local MapService = {
-    Name = "MapService"
-}
+4. **Structured Map Layout & Cover Density**:
+   - Ensure hiders have diverse hiding spots (multi-level structures, alcoves, interior rooms, crates, rooftop ledges).
+   - Use `ServerStorage.Maps` templates or procedural assembly with varied heights and rotation offsets.
 
-local activeMap: Folder? = nil
-
-function MapService:Init()
-    -- Initialize map folders
-end
-
-function MapService:LoadMap(mapName: string)
-    if activeMap then
-        activeMap:Destroy()
-        activeMap = nil
-    end
-
-    local mapTemplate = ServerStorage.Maps:FindFirstChild(mapName)
-    if not mapTemplate then return warn("Map template not found: " .. mapName) end
-
-    activeMap = mapTemplate:Clone()
-    activeMap.Parent = Workspace
-end
-
-return MapService
-```
-
-### 2. Region / Zone Detection
-Do not use legacy `Touched` events for continuous zone checking (e.g., healing zones, hazard zones), as they are unreliable. Use spatial query APIs (`workspace:GetPartBoundsInBox` or `workspace:GetPartsInPart`) on a loop, or a modern Zone library wrapper in Packages.
-
-```lua
--- Zone check using box spatial query
-local function checkZone(zonePart: Part)
-    local overlapParams = OverlapParams.new()
-    overlapParams.FilterType = Enum.RaycastFilterType.Include
-    overlapParams.FilterDescendantsInstances = {workspace:FindFirstChild("Characters")}
-
-    local partsInZone = workspace:GetPartsInPart(zonePart, overlapParams)
-    for _, part in partsInZone do
-        local character = part.Parent
-        local humanoid = character:FindFirstChildOfClass("Humanoid")
-        if humanoid then
-            -- Apply zone-specific behavior (e.g. status effect)
-        end
-    end
-end
-```
-
-### 3. Checkpoint / Teleport Management
-Ensure player spawns and teleports are secure and handle latency (e.g., pivoting character models safely via `:PivotTo()` instead of setting `.Position` on individual parts).
+5. **Safe Player Spawning & Teleportation**:
+   - Use `:PivotTo()` to safely teleport player character models.
+   - Avoid legacy `Touched` events for continuous zone checking; use spatial query APIs (`workspace:GetPartsInPart` / `workspace:GetPartBoundsInBox`).
 
 ---
 
-## Production Checklist for Level Designers
-- [ ] Are maps kept in `ServerStorage` and loaded dynamically?
-- [ ] Are zone boundaries checked using spatial query APIs rather than legacy `Touched` events?
-- [ ] Do character spawns/teleports use `:PivotTo()` to ensure the entire assembly teleports together?
-- [ ] Is map loading fully integrated with Roblox's `StreamingEnabled` constraints?
+## 🛠️ Atmospheric Environment Initialization Blueprint
+
+```lua
+local Lighting = game:GetService("Lighting")
+
+local function setupAtmosphericLighting()
+    Lighting.Technology = Enum.Technology.Future
+    Lighting.ClockTime = 22.0 -- Night time for high contrast neon
+    Lighting.Ambient = Color3.fromRGB(18, 12, 32)
+    Lighting.OutdoorAmbient = Color3.fromRGB(28, 18, 48)
+    Lighting.GlobalShadows = true
+
+    local bloom = Lighting:FindFirstChildOfClass("BloomEffect") or Instance.new("BloomEffect")
+    bloom.Intensity = 0.75
+    bloom.Size = 24
+    bloom.Threshold = 0.8
+    bloom.Parent = Lighting
+
+    local colorCorrection = Lighting:FindFirstChildOfClass("ColorCorrectionEffect") or Instance.new("ColorCorrectionEffect")
+    colorCorrection.Saturation = 0.15
+    colorCorrection.Contrast = 0.2
+    colorCorrection.TintColor = Color3.fromRGB(240, 230, 255)
+    colorCorrection.Parent = Lighting
+end
+```
+
+---
+
+## 📋 Production Checklist for Level Designers
+
+- [ ] Is `Lighting` configured with post-processing (`Bloom`, `ColorCorrection`, `Future` technology)?
+- [ ] Are maps detailed with varied materials, neon accent strips, and ambient particle effects?
+- [ ] Are character teleports using `:PivotTo()` to prevent model disassembly?
+- [ ] Are map templates cloned from `ServerStorage` dynamically or built with rich procedural detail?
+- [ ] Are zones checked via spatial queries (`GetPartsInPart`) rather than legacy `Touched` events?
