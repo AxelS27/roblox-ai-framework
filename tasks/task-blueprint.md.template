@@ -1,0 +1,44 @@
+# Task Spec: [ID] - [Task Title]
+
+---
+
+## 📊 Status
+* **Status:** `[Todo | In Progress | Completed]`
+
+---
+
+## 🎯 Objective
+`[Describe what this task accomplishes in 1-2 sentences. Keep it granular and highly focused on a single change.]`
+
+---
+
+## 👥 User Story
+* **As a** `[Player/Developer]`
+* **I want to** `[perform action / have feature]`
+* **So that** `[value/benefit is achieved]`
+
+---
+
+## 📋 Requirements
+* **`[Requirement 1]`**: `[e.g., Create a ReplicatedStorage remote event for communication.]`
+* **`[Requirement 2]`**: `[e.g., Update the server-side service to listen and validate inputs.]`
+* **`[Requirement 3]`**: `[e.g., Connect the client-side UI button to trigger the event.]`
+
+---
+
+## 📂 Proposed Changes
+
+### `[Component Name (e.g. Shared Network)]`
+* **`[NEW]`** / **`[MODIFY]`** `[File Name, e.g., src/shared/Network/Net.luau]`
+  * `[Explain specific code modifications or additions required here.]`
+
+---
+
+## 🧪 Verification Plan
+
+### Automated Verification
+* **`[Test Command/Script]`**: `[e.g., Execute unit test script / debug run in Roblox Studio.]`
+
+### Manual Verification
+1. `[Step 1, e.g., Run Roblox Studio playtest.]`
+2. `[Step 2, e.g., Trigger UI interaction and check output logs.]`
