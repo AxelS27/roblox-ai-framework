@@ -14,9 +14,9 @@ local _components: { [string]: any } = {}
 
 -- Service APIs
 function Registry:RegisterService(service: any)
-    assert(typeof(service) == "table", "Service must be a table")
-    assert(typeof(service.Name) == "string", "Service must have a String Name")
-    _services[service.Name] = service
+    if typeof(service) == "table" and typeof(service.Name) == "string" then
+        _services[service.Name] = service
+    end
 end
 
 function Registry:GetService(name: string): any
@@ -29,9 +29,9 @@ end
 
 -- Controller APIs
 function Registry:RegisterController(controller: any)
-    assert(typeof(controller) == "table", "Controller must be a table")
-    assert(typeof(controller.Name) == "string", "Controller must have a String Name")
-    _controllers[controller.Name] = controller
+    if typeof(controller) == "table" and typeof(controller.Name) == "string" then
+        _controllers[controller.Name] = controller
+    end
 end
 
 function Registry:GetController(name: string): any

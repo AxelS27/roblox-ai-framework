@@ -47,13 +47,14 @@ function Loader.Load(folder: Instance, registerFn: (module: any, name: string) -
     for _, moduleScript in modules do
         local success, result = pcall(require, moduleScript)
         if success and typeof(result) == "table" then
-            local moduleName = result.Name or moduleScript.Name
-            
-            -- Register module in Registry
-            registerFn(result, moduleName)
-            
-            -- Cache for lifecycle initialization
-            table.insert(loadedModules, result)
+            local moduleName = result.Name
+            if typeof(moduleName) == "string" then
+                -- Register module in Registry
+                registerFn(result, moduleName)
+                
+                -- Cache for lifecycle initialization
+                table.insert(loadedModules, result)
+            end
         else
             warn(string.format("[Core Loader] Failed to load module: %s. Error: %s", moduleScript:GetFullName(), tostring(result)))
         end
