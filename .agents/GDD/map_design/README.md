@@ -10,9 +10,9 @@ This folder registers all world, biome, map configurations, and sub-places for c
 ## 🛠️ Cross-World Experience Registry
 `[Specify the Roblox Place IDs in your Universe. This guides the Place-Adaptive loading engine during startup.]`
 
-* **Lobby/Menu Place ID:** `[Insert Place ID, e.g. 12345678]`
-* **Main Game Server Place ID:** `[Insert Place ID, e.g. 87654321]`
-* **Trading Hub Place ID:** `[Insert Place ID, e.g. 11223344]`
+* **Lobby/Menu Place ID:** `[Insert Place ID / Placeholder]`
+* **Main Game Server Place ID:** `[Insert Place ID / Placeholder]`
+* **Trading Hub Place ID:** `[Insert Place ID / Placeholder]`
 
 ---
 

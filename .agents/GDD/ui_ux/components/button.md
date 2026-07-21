@@ -35,7 +35,7 @@ TextButton (Root)
 ├── ImageLabel (Icon - Optional)
 │   └── UIAspectRatioConstraint (1:1)
 ├── TextLabel (Button Label Text)
-└── Sound (ClickSFX - SoundId: rbxassetid://12345678)
+└── Sound (ClickSFX - SoundId: rbxassetid://[SoundID])
 ```
 
 ---
@@ -68,8 +68,8 @@ stateDiagram-v2
 
 | State | Visual Feedback | Tween Style & Duration | Audio Event |
 | :--- | :--- | :--- | :--- |
-| **Hover** | Scale `1.05x`, Fill Brightness `+10%` | `Sine Out (0.15s)` | Hover Tick `rbxassetid://98765432` |
-| **Pressed** | Scale `0.95x`, Fill Brightness `-15%` | `Quad Out (0.1s)` | Click SFX `rbxassetid://12345678` |
+| **Hover** | Scale `1.05x`, Fill Brightness `+10%` | `Sine Out (0.15s)` | Hover Tick `rbxassetid://[SoundID]` |
+| **Pressed** | Scale `0.95x`, Fill Brightness `-15%` | `Quad Out (0.1s)` | Click SFX `rbxassetid://[SoundID]` |
 | **Loading** | Label hidden, Spinner rotates continuously | `Linear (1.0s loop)` | None |
 | **Disabled** | Scale `1.0x`, Opacity `0.5`, Input ignored | `None` | None |
 

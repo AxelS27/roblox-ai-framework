@@ -26,7 +26,7 @@ local ModelConfig: {[string]: ModelData} = {
     LobbyTree = {
         CanCollide = true,
         Massless = false,
-        AssetId = "rbxassetid://12345678",
+        AssetId = "rbxassetid://[AssetID]",
     }
 }
 

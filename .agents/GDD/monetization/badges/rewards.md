@@ -22,10 +22,7 @@ export type BadgeReward = {
 }
 
 local BadgeRewardsConfig: {[number]: BadgeReward} = {
-    [12345678] = { -- Replace with Badge ID
-        coinsReward = 500,
-        chatTag = "Veteran",
-    }
+    -- [BadgeID_Placeholder] = { coinsReward = 500, chatTag = "Veteran" }
 }
 
 return table.freeze(BadgeRewardsConfig)

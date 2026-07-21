@@ -24,7 +24,7 @@ export type VfxData = {
 local VfxConfig: {[string]: VfxData} = {
     HitSparks = {
         Duration = 0.5,
-        AssetId = "rbxassetid://12345678",
+        AssetId = "rbxassetid://[AssetID]",
     }
 }
 

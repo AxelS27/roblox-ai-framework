@@ -28,7 +28,7 @@ local AudioConfig: {[string]: AudioData} = {
         Volume = 0.5,
         Pitch = 1.0,
         Looped = false,
-        AssetId = "rbxassetid://12345678",
+        AssetId = "rbxassetid://[AssetID]",
     }
 }
 

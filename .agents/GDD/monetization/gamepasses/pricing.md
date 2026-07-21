@@ -23,10 +23,7 @@ export type GamepassData = {
 }
 
 local MonetizationConfig: {[number]: GamepassData} = {
-    [12345678] = { -- Replace with Gamepass Asset ID
-        Price = 400,
-        BonusMultiplier = 1.2,
-    }
+    -- [GamepassID_Placeholder] = { Price = 400, BonusMultiplier = 1.2 }
 }
 
 return table.freeze(MonetizationConfig)

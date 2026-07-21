@@ -61,8 +61,8 @@ Frame (Backdrop Overlay - Size {1,0, 1,0}, BackgroundTransparency: 0.3)
 
 | Event | Action & Animation | Easing & Duration | SFX |
 | :--- | :--- | :--- | :--- |
-| **Open** | Backdrop fades in (`0 -> 0.35`). Container scales `0.8 -> 1.0` and fades in. Blur size `0 -> 16` | `Back Out (0.3s)` | PopOpen `rbxassetid://45678901` |
-| **Close** | Container scales `1.0 -> 0.8` and fades out. Backdrop fades out. Blur size `16 -> 0` | `Quad In (0.2s)` | PopClose `rbxassetid://45678902` |
+| **Open** | Backdrop fades in (`0 -> 0.35`). Container scales `0.8 -> 1.0` and fades in. Blur size `0 -> 16` | `Back Out (0.3s)` | PopOpen `rbxassetid://[SoundID]` |
+| **Close** | Container scales `1.0 -> 0.8` and fades out. Backdrop fades out. Blur size `16 -> 0` | `Quad In (0.2s)` | PopClose `rbxassetid://[SoundID]` |
 | **Backdrop Click** | Clicking outside the dialog triggers `OnCancel()` | `None` | Click Tick |
 
 ---

@@ -24,7 +24,7 @@ export type AnimationData = {
 local AnimationConfig: {[string]: AnimationData} = {
     Run = {
         Priority = Enum.AnimationPriority.Movement,
-        AssetId = "rbxassetid://12345678", -- Replace with ID
+        AssetId = "rbxassetid://[AssetID]", -- Replace with ID
     }
 }
 
