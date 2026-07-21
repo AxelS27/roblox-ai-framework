@@ -99,7 +99,12 @@ Any AI assistant reading this workspace must handle the following commands direc
       * **Agile User Story Wrap**: Every task file must contain a clear, user-facing User Story (As a / I want to / So that) to establish the logical flow and player value.
       * **Mandatory Edit-Mode Staging Requirements**: Every task that implements or modifies a visual component (such as UI panels in `StarterGui`) or physical component (such as map models, lighting, or zones in `Workspace`/`ReplicatedStorage`) MUST include a mandatory, explicit requirement to physically build and stage those assets natively in Roblox Studio (Edit Mode via MCP) *before* any scripting or logic integration for that task is executed, ensuring the user can always inspect them visually in the viewport.
     - **Reconciliation**: If tasks already exist, preserve the "Completed" task history. Reconcile the pending tasks under "To Do" with any new GDD context, updating existing files or adding new ones.
-   - **Execution**: When instructed by the user (e.g., "Execute task 001"), move the task to "In Progress" in `tasks/README.md` and the task file, read its specifications, perform the code changes, verify them, and mark it as "Completed" upon success.
+    - **Execution**: When instructed by the user (e.g., "Execute task 001"), move the task to "In Progress" in `tasks/README.md` and the task file, read its specifications, perform the code changes, and execute the **Professional SE Testing Protocol**:
+      * **Unit/Integration Testing**: Run Luau unit testing scripts in Roblox Studio using MCP `execute_luau`.
+      * **Visual & Scene Hierarchy Checks**: Inspect `StarterGui` or `Workspace` via tree search tools to verify staged UI and physical map assets.
+      * **Roblox Studio Console Log Audit**: Trigger playtesting via MCP `start_stop_play` (if testing runtime logic), wait 3-5 seconds, and invoke MCP `get_console_output` to retrieve recent logs.
+      * **Zero-Error Invariant Constraint**: The captured console logs **MUST contain exactly 0 red error traces or warn stack traces** originating from the modified or created modules. If errors are found, the task is NOT complete; revert status, fix code, and re-test.
+      * Mark it as "Completed" in both `tasks/README.md` and the task file only upon a clean console log verification, and paste the log snippet as proof.
 
 4. **`/gdd`**:
    - Receive input via `/gdd [file_path]` or `/gdd [raw pasted text]`.

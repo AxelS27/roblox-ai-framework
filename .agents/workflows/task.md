@@ -66,9 +66,13 @@ graph TD
   1. **Update Status to In Progress**: Mark status to `🟡 In Progress` in `tasks/README.md` and `tasks/XXX-name.md`.
   2. **Read Task Requirements**: Read the target task file completely.
   3. **Execute Code Changes**: Modify or create target Luau modules in `src/`.
-  4. **Run Verification**: Perform automated tests or playtest verification in Roblox Studio.
+  4. **Professional SE Testing Protocol**:
+     * **Unit/Integration Testing**: Run Luau unit testing scripts in Roblox Studio using MCP `execute_luau`.
+     * **Visual & Scene Hierarchy Checks**: Inspect `StarterGui` or `Workspace` via tree search tools to verify staged UI and physical map assets.
+     * **Roblox Studio Console Log Audit**: Trigger playtesting via MCP `start_stop_play` (if testing runtime logic), wait 3-5 seconds, and invoke MCP `get_console_output` to retrieve recent logs.
+     * **Zero-Error Invariant Constraint**: The captured console logs **MUST contain exactly 0 red error traces or warn stack traces** originating from the modified or created modules. If errors are found, the task is NOT complete; revert status, fix code, and re-test.
   5. **Mark Completed**: Update status to `🟢 Completed` in both `tasks/README.md` and the task file.
-  6. **Report**: Summarize completed work and highlight the next task in queue.
+  6. **Report**: Summarize completed work, paste the clean console log snippet as proof of verification, and highlight the next task in queue.
 
 ---
 
