@@ -25,8 +25,8 @@ graph TD
     C --> E["4. Map Mechanics -> gameplay/ & Luau Config Schemas"]
     C --> F["5. Map Economy -> monetization/badges/ & gamepasses/"]
     C --> G["6. Map Assets -> assets/ (animations, models, audio, vfx)"]
-    C --> H["7. Map Places -> map_design/ & Place ID Registry"]
-    C --> I["8. Map UI -> ui_ux/design-system.md & component blueprints"]
+    C --> H["7. Map Places -> map_design/worlds/ & Place ID Registry"]
+    C --> I["8. Map UI -> ui_ux/design-system.md & ui_ux/components/ specs"]
     D & E & F & G & H & I --> J["9. Write Modular Files & Report Created Directories"]
 ```
 
@@ -65,15 +65,19 @@ graph TD
 
 #### E. Map Design & Cross-World Specs (`map_design/`)
 * Identify Place IDs (Lobby/Menu, Main Game, Trade Hub).
-* Document lighting properties (Ambient, OutdoorAmbient, Shadows) and post-processing effects (DepthOfField, Bloom) into `map_design/templates/world-spec.md` or dedicated place files.
+* Document lighting properties (Ambient, OutdoorAmbient, Shadows) and post-processing effects (DepthOfField, Bloom) into templates.
+* Write dedicated place/world files at `.agents/GDD/map_design/worlds/[world-name].md` using `templates/world-spec.md`.
 
 #### F. UI/UX & Component Blueprints (`ui_ux/`)
 * Extract brand palette colors (HSL/Hex), typography, and easing styles into `ui_ux/design-system.md`.
-* Map screen UI mockups to `ui_ux/templates/screen-spec.md` (detailing Left/Right panels, Dynamic Camera Focus tables, and rotation behaviors).
-* Reference component blueprints (`button.md`, `card.md`, `dialog.md`, `hotbar.md`, `progress-bar.md`, `slider.md`, `tab-bar.md`, `tooltip.md`).
+* Map screen UI mockups to dedicated files under `ui_ux/components/[screen-name].md` using `templates/screen-spec.md` (detailing Left/Right panels, Dynamic Camera Focus tables, Input/Navigation behaviors, and rotation behaviors).
+* Reference component blueprints (`button.md`, `card.md`, `dialog.md`, `hotbar.md`, `progress-bar.md`, `slider.md`, `tab-bar.md`, `tooltip.md`, `player-card.md`, `leaderboard.md`).
 
 #### G. Dynamic Custom Domain Extensions
 * If the draft describes unique systems (e.g., Crafting, Skill Trees, Guilds), dynamically create new domain subfolders inside `.agents/GDD/` (e.g. `.agents/GDD/crafting/README.md`).
+
+#### H. Mandatory User Stories
+* **Mandatory constraint**: EVERY individual UI component spec file and Map world spec file MUST contain its own clear User Story section (`As a ... / I want to ... / So that ...`) to define player intent and value.
 
 ### Step 3: File System Synthesis & Output
 * Write all populated files to `.agents/GDD/`.
@@ -84,3 +88,4 @@ graph TD
 ## 🚫 Anti-Patterns
 * **Do NOT write monolithic files**: Never dump everything into a single 5000-line GDD file. Split specs into domain folders.
 * **Do NOT omit Luau Config Schemas**: Every gameplay mechanic MUST include a Luau code block showing the suggested config table schema.
+* **Do NOT omit User Stories**: Do not leave individual UI or World spec files without a dedicated player-facing User Story section.
