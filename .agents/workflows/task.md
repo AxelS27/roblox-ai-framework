@@ -49,7 +49,7 @@ graph TD
 * **Trigger**: Executed when `tasks/` contains no active task files.
 * **Procedure**:
   1. Scan all domain files inside `.agents/GDD/`.
-  2. Deconstruct features into isolated, sequential steps (e.g. Task 001: DataStore ProfileService Setup ➔ Task 002: Remote Net Event Declaration ➔ Task 003: Client Controller & UI State ➔ Task 004: CollectionService Components).
+  2. Deconstruct features into isolated, sequential steps, ensuring that **Edit-Mode UI Visual Staging** (building layouts in `StarterGui` via MCP) and **Edit-Mode Map Staging** (building environment structures and lighting in `Workspace` via MCP) are scheduled as the **first tasks** (e.g. Task 001: Edit-Mode Map Staging ➔ Task 002: Edit-Mode UI Staging) *before* proceeding to scripting and logic integration tasks (e.g. Task 003: Network Event Hooking ➔ Task 004: Client-Server Scripting).
   3. Create individual task files at `tasks/XXX-name.md` following [task-blueprint.md.template](file:///d:/Experiments/Roblox%20AI%20Framework/tasks/task-blueprint.md.template).
   4. Write the master index at [tasks/README.md](file:///d:/Experiments/Roblox%20AI%20Framework/tasks/README.md) listing all tasks under `🔴 To Do`.
 

@@ -94,10 +94,11 @@ Any AI assistant reading this workspace must handle the following commands direc
 
 3. **`/task`**:
    - Scan the `tasks/` directory at the project root and all design documents inside `.agents/GDD/`.
-   - **Initial Generation**: If no tasks exist, generate a sequential, highly granular (one-by-one) roadmap of implementation tasks. Create each task as a separate file at `tasks/XXX-name.md` using the structure in [task-blueprint.md.template](file:///d:/Experiments/Roblox%20AI%20Framework/tasks/task-blueprint.md.template). Write a master task index at [README.md](file:///d:/Experiments/Roblox%20AI%20Framework/tasks/README.md) showing all tasks under the "To Do" section.
-     * **Extreme Technical Specification**: Each generated task must not be generic. It must detail the exact UI panels layouts, button slots, camera zoom focus targets/offsets, environment lighting properties, or audio/sfx parameters described in the GDD.
-     * **Agile User Story Wrap**: Every task file must contain a clear, user-facing User Story (As a / I want to / So that) to establish the logical flow and player value.
-   - **Reconciliation**: If tasks already exist, preserve the "Completed" task history. Reconcile the pending tasks under "To Do" with any new GDD context, updating existing files or adding new ones.
+    - **Initial Generation**: If no tasks exist, generate a sequential, highly granular (one-by-one) roadmap of implementation tasks. Create each task as a separate file at `tasks/XXX-name.md` using the structure in [task-blueprint.md.template](file:///d:/Experiments/Roblox%20AI%20Framework/tasks/task-blueprint.md.template). Write a master task index at [README.md](file:///d:/Experiments/Roblox%20AI%20Framework/tasks/README.md) showing all tasks under the "To Do" section.
+      * **Extreme Technical Specification**: Each generated task must not be generic. It must detail the exact UI panels layouts, button slots, camera zoom focus targets/offsets, environment lighting properties, or audio/sfx parameters described in the GDD.
+      * **Agile User Story Wrap**: Every task file must contain a clear, user-facing User Story (As a / I want to / So that) to establish the logical flow and player value.
+      * **Mandatory Edit-Mode Staging Priority**: The roadmap **MUST** prioritize **Edit-Mode UI Visual Staging** (designing frames in `StarterGui` via MCP) and **Edit-Mode Map Staging** (building geometry and lighting in `Workspace` via MCP) as the **very first tasks** (Task 001, Task 002) before any scripting or logic tasks, so the user can inspect the visual assets before code is hooked.
+    - **Reconciliation**: If tasks already exist, preserve the "Completed" task history. Reconcile the pending tasks under "To Do" with any new GDD context, updating existing files or adding new ones.
    - **Execution**: When instructed by the user (e.g., "Execute task 001"), move the task to "In Progress" in `tasks/README.md` and the task file, read its specifications, perform the code changes, verify them, and mark it as "Completed" upon success.
 
 4. **`/gdd`**:
