@@ -61,6 +61,7 @@ Always adhere to these architectural patterns when writing code. **Do not use ra
 * **[Data Persistence Pattern](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/patterns/data-pattern.md)**: ProfileService session locking, auto-reconciliation, and DataStore fallback.
 * **[Zero-Trust Security Pattern](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/patterns/security-pattern.md)**: Rate limiting, payload sanitization, NaN/Inf checks, and distance validation.
 * **[Performance & Memory Pattern](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/patterns/performance-pattern.md)**: Mobile memory optimization, spatial partitioning queries, and render delegation.
+* **[Loading State & Preloading Pattern](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/patterns/loading-pattern.md)**: Boot asset preloading, universe teleport overlays, and map swap transition curtains.
 
 ---
 
