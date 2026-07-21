@@ -14,6 +14,7 @@ The **MockPlayerService** is an advanced testing subsystem designed to simulate 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local PathfindingService = game:GetService("PathfindingService")
+local CollectionService = game:GetService("CollectionService")
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
@@ -29,26 +30,35 @@ local MockPlayerService = {
     } },
 }
 
--- 1. Create Mock Player Data & Appearance
+-- 1. Create Mock Player Character & Bind Standard Animations
 function MockPlayerService:CreateMockPlayer(name: string, userId: number, spawnLocation: CFrame)
-    if not RunService:IsStudio() then return end -- Guard to prevent bots in live production servers
+    if not RunService:IsStudio() then return end
     
-    local character = Instance.new("Model")
+    -- Spawn a standard character model structure (or clone a pre-rigged R15 character template)
+    local characterTemplate = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Assets"):FindFirstChild("CharacterTemplate")
+    local character: Model
+    
+    if characterTemplate then
+        character = characterTemplate:Clone() :: Model
+    else
+        character = Instance.new("Model")
+        local humanoid = Instance.new("Humanoid")
+        humanoid.Parent = character
+        
+        local rootPart = Instance.new("Part")
+        rootPart.Name = "HumanoidRootPart"
+        rootPart.Size = Vector3.new(2, 2, 1)
+        rootPart.Parent = character
+        character.PrimaryPart = rootPart
+    end
+
     character.Name = name
+    character.PrimaryPart.CFrame = spawnLocation
     character.Parent = workspace
     
-    local humanoid = Instance.new("Humanoid")
-    humanoid.Parent = character
-    
-    local rootPart = Instance.new("Part")
-    rootPart.Name = "HumanoidRootPart"
-    rootPart.Size = Vector3.new(2, 2, 1)
-    rootPart.CFrame = spawnLocation
-    rootPart.CanCollide = true
-    rootPart.Parent = character
-    character.PrimaryPart = rootPart
+    local humanoid = character:WaitForChild("Humanoid") :: Humanoid
 
-    -- Inject Mock Character Appearance
+    -- Load Character Outfit/Appearance from Roblox Web API
     task.spawn(function()
         local success, description = pcall(function()
             return Players:GetHumanoidDescriptionFromUserId(userId)
@@ -58,10 +68,17 @@ function MockPlayerService:CreateMockPlayer(name: string, userId: number, spawnL
         end
     end)
 
-    -- Register Mock Player profile in DataService
+    -- Inject Standard Player Animate Script (Replicates normal running, idle, and jump motions)
+    local animateScript = character:FindFirstChild("Animate") or ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Assets"):FindFirstChild("AnimateScript")
+    if animateScript then
+        local clone = animateScript:Clone()
+        clone.Disabled = false
+        clone.Parent = character
+    end
+
+    -- Register Mock Player profile in DataStore / DataService
     local DataService = Registry:GetService("DataService")
     if DataService then
-        -- Seed mock profile data for leaderboard & reward systems
         DataService:PlayerAdded({
             UserId = userId,
             Name = name,
@@ -76,11 +93,11 @@ function MockPlayerService:CreateMockPlayer(name: string, userId: number, spawnL
         Active = true,
     }
 
-    -- Start simple automated behavior loop
+    -- Start Goal-Driven Cover-Seeking Bot AI
     self:StartBotAI(name)
 end
 
--- 2. Simulate Bot Autonomous Movement (Testing Cover & Interactions)
+-- 2. Simulate Bot Autonomous Hiding & Chasing (Pathfinding to Cover Tags)
 function MockPlayerService:StartBotAI(name: string)
     local bot = self.MockPlayers[name]
     if not bot then return end
@@ -90,14 +107,53 @@ function MockPlayerService:StartBotAI(name: string)
         local rootPart = bot.Character:WaitForChild("HumanoidRootPart") :: BasePart
 
         while bot.Active and bot.Character.Parent do
-            task.wait(math.random(3, 8)) -- Wait random time before shifting position
-            
-            -- Find a random point within 40 studs to walk to
-            local offset = Vector3.new(math.random(-40, 40), 0, math.random(-40, 40))
-            local destination = rootPart.Position + offset
-            
-            -- Pathfind or direct walk to destination
-            humanoid:MoveTo(destination)
+            task.wait(math.random(4, 10)) -- Delay before moving to new cover
+
+            -- Query environment for parts tagged with "CoverProp" or "HidingSpot"
+            local coverSpots = CollectionService:GetTagged("CoverProp")
+            local targetDestination: Vector3? = nil
+
+            if #coverSpots > 0 then
+                -- Choose a random cover spot near the bot to pathfind to
+                local randomSpot = coverSpots[math.random(1, #coverSpots)] :: BasePart
+                targetDestination = randomSpot.Position
+            else
+                -- Fallback to random wander within 50 studs
+                local offset = Vector3.new(math.random(-50, 50), 0, math.random(-50, 50))
+                targetDestination = rootPart.Position + offset
+            end
+
+            if targetDestination then
+                -- Generate path using PathfindingService to navigate around solid walls
+                local path = PathfindingService:CreatePath({
+                    AgentRadius = 2,
+                    AgentHeight = 5,
+                    AgentCanJump = true,
+                })
+                
+                local success, errorMessage = pcall(function()
+                    path:ComputeAsync(rootPart.Position, targetDestination)
+                end)
+
+                if success and path.Status == Enum.PathStatus.Success then
+                    local waypoints = path:GetWaypoints()
+                    for _, waypoint in ipairs(waypoints) do
+                        if not bot.Active or not bot.Character.Parent then break end
+                        
+                        -- Handle Jumping through obstacles
+                        if waypoint.Action == Enum.PathWaypointAction.Jump then
+                            humanoid.Jump = true
+                        end
+                        
+                        humanoid:MoveTo(waypoint.Position)
+                        humanoid.MoveToFinished:Wait()
+                    end
+                else
+                    -- Direct line walk if pathfinding fails
+                    humanoid:MoveTo(targetDestination)
+                    humanoid.MoveToFinished:Wait()
+                end
+            end
         end
     end)
 end
@@ -118,7 +174,7 @@ end
 
 function MockPlayerService:Init()
     if RunService:IsStudio() then
-        print("[Testing] MockPlayerService loaded. Use MockPlayerService:CreateMockPlayer() to spawn bots.")
+        print("[Testing] MockPlayerService loaded with Pathfinding cover search & Animate controllers.")
     end
 end
 
