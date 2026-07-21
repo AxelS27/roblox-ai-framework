@@ -10,19 +10,30 @@
 ---
 
 ## 🏬 Map Overview & Setting
-* **Theme / Setting:** `[e.g. Sci-Fi Station, Fantasy Kingdom, Downtown City]`
-* **Key Visual Aesthetics:** `[e.g. Metallic floors, neon lights, glass windows]`
+* **Theme / Setting:** `[e.g. Volcanic Island, Sci-Fi Station, Gothic Castle]`
+* **Key Visual Aesthetics:** `[e.g. Glowing magma rivers, dark basalt rock, ash particles, metal catwalks]`
 * **Roblox Place ID:** `[Insert Place ID / Placeholder]`
 * **Player Capacity:** `[e.g. 16 Players]`
+
+---
+
+## 🗺️ Sub-Locations, Landmarks & Layout Connectivity
+`[Divide the map into distinct sub-areas/landmarks and detail how they connect and what mechanics exist in each area.]`
+
+| Sub-Location / Landmark | Visual & Architectural Theme | Connected To | Gameplay Function / Mechanics & Tags |
+| :--- | :--- | :--- | :--- |
+| **`[Area 1: e.g., Volcanic Crater]`** | `[High elevation, glowing magma pool rim]` | `[Connects to Area 2 via Rope Bridge]` | `[Stage 3 Eruption Event Anchor, Tag: HighGround]` |
+| **`[Area 2: e.g., Lava River Bridge]`** | `[Narrow wooden/metal bridge over magma]` | `[Connects Area 1 and Area 3]` | `[Hazard: Fall damage / Lava Damage, Tag: DamageZone]` |
+| **`[Area 3: e.g., Obsidian Caverns]`** | `[Enclosed dark cave system with basalt pillars]` | `[Connects to Area 2 and Sub-Exit]` | `[High cover density, Tag: StealthZone]` |
 
 ---
 
 ## ⚡ Dynamic Environment Event Chain Sequence
 `[Specify the 3-stage dynamic environmental events triggered during the match on this map.]`
 
-1. **Stage 1 Event (Early Match):** `[e.g. Power Outage - Ambient lighting dims for 10 seconds]`
-2. **Stage 2 Event (Mid Match):** `[e.g. Environmental Hazard - Water level rises or low gravity activates]`
-3. **Stage 3 Event (Late Match Climax):** `[e.g. Map Collapse - Main bridge breaks, opening alternative path]`
+1. **Stage 1 Event (Early Match):** `[e.g. Minor Tremor - Screen shake and falling ash particles]`
+2. **Stage 2 Event (Mid Match):** `[e.g. Lava Level Rise - Magma pool in Area 2 rises 4 studs]`
+3. **Stage 3 Event (Late Match Climax):** `[e.g. Volcanic Eruption - Lava rocks rain from the sky, opening secret exit in Area 3]`
 
 ---
 
@@ -62,3 +73,4 @@ Every map model instantiated natively into `ReplicatedStorage.Maps` or `Workspac
 * `Workspace.CurrentMap.PlayerSpawns` (`Folder` of CFrame parts)
 * `Workspace.CurrentMap.LobbyCage` (`Model` or `Folder` with spawn barrier)
 * `Workspace.CurrentMap.EventTriggers` (`Folder` containing event anchors, moving doors, triggers)
+* `Workspace.CurrentMap.GameplayZones` (`Folder` containing CollectionService-tagged zone parts: `DamageZone`, `HealZone`, `SpeedZone`, etc.)
