@@ -51,3 +51,18 @@ end
 
 ### 3. Client-Side Render Delegation
 Do not calculate particles, tweens, or UI animations on the server. Always broadcast state change events via `Net:FireAllClients()` and let each client render visual effects locally.
+
+### 4. Distance-Based VFX & Sound Culling (LOD)
+Enforce strict client-side distance culling for non-critical visual effects (hit sparks, smoke bursts) and transient sound plays. 
+- Skip spawning instances or emitting particles if the distance from the player's active camera to the sound/VFX origin exceeds the visual budget (default: 150 studs).
+- This keeps GPU draw calls low and prevents audio channels from clipping on low-end devices in busy game worlds.
+
+```lua
+local MAX_BUDGET_DISTANCE = 150
+
+local function isWithinRenderBudget(targetPosition: Vector3): boolean
+    local camera = workspace.CurrentCamera
+    if not camera then return false end
+    return (camera.CFrame.Position - targetPosition).Magnitude <= MAX_BUDGET_DISTANCE
+end
+```
