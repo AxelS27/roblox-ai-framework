@@ -49,9 +49,12 @@ graph TD
 * **Trigger**: Executed when `tasks/` contains no active task files.
 * **Procedure**:
   1. Scan all domain files inside `.agents/GDD/`.
-  2. Deconstruct features into isolated, sequential steps:
-     * For every task that deals with a visual UI screen or physical map/world level, **the task MUST contain an explicit requirement to build and stage those assets natively in Roblox Studio (Edit Mode via MCP) before any scripting or logic for that task is executed**.
-     * The roadmap **MUST include a dedicated task at the end** (e.g. `Task XXX: Mock Multiplayer Bot Integration`) to configure the `MockPlayerService` test suite, allowing the solo developer to verify the entire game loop with autonomous bots.
+  2. Deconstruct features into a **Strict 5-Phase Sequential Roadmap**:
+     * **Phase 1 (Task 001)**: `Physical 3D Map & World Geometry Staging` (Building map models, biomes, landmarks, and zones directly in `Workspace` via MCP Edit Mode).
+     * **Phase 2 (Task 002)**: `Lighting, Skybox & Atmospheric Setup` (Configuring Atmosphere, Sky, Bloom, ColorCorrection in `Lighting` via MCP Edit Mode).
+     * **Phase 3 (Task 003+)**: `UI Screens & HUD Visual Layout Staging` (Building all ScreenGui frames and panels in `StarterGui` via MCP Edit Mode).
+     * **Phase 4 (Task 004+)**: `Gameplay Systems & Backend Services` (Scripting Luau Services, Controllers, DataStore, Remotes, and Mechanics).
+     * **Phase 5 (Final Task)**: `Mock Multiplayer Bot Integration` (Configuring `MockPlayerService` test suite to verify the game loop with bots in Studio).
   3. Create individual task files at `tasks/XXX-name.md` following [task-blueprint.md.template](file:///d:/Experiments/Roblox%20AI%20Framework/tasks/task-blueprint.md.template).
   4. Write the master index at [tasks/README.md](file:///d:/Experiments/Roblox%20AI%20Framework/tasks/README.md) listing all tasks under `🔴 To Do`.
 
