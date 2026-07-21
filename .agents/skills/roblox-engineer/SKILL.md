@@ -42,6 +42,10 @@ Use CollectionService tags to bind behavior dynamically. Follow the **[Collectio
 - Group similar objects (hazard bricks, checkpoints, moving obstacles) with tags in Roblox Studio.
 - Run a single Component singleton class on the server or client to monitor instance spawns/removals and manage their lifecycles.
 
+### 3. Physical Asset Templates & Edit-Mode Staging (WYSIWYG)
+- **Edit-Mode Visual Staging**: Maps, Lighting, Buildings, Props, and UI Screens (`StarterGui`) MUST be instantiated natively in Roblox Studio during Edit Mode before playtesting.
+- **Physical Asset Templates**: For dynamic runtime entities (bullets, projectiles, coins, loot crates, powerups), DO NOT construct raw geometry imperatively via `Instance.new()` inside runtime scripts. Instantiate pre-built, styled 3D Physical Model Templates in `ReplicatedStorage.Shared.Assets` or `ServerStorage.Templates` during Edit Mode, and simply clone (`template:Clone()`) them at runtime.
+
 ---
 
 ## Production Checklist for Roblox Engineers

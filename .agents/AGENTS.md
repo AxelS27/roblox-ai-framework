@@ -73,7 +73,8 @@ Always adhere to these architectural patterns when writing code. **Do not use ra
 4. **Zero Trust boundaries**: All remote calls must be sanitized by type checks, NaN checks, and distance validations on the server.
 5. **No Dumping Grounds**: Do not place generic code inside `Utils`. Split them into granular modules under `Utilities/` (e.g. `Utilities/Tables.luau`).
 6. **Senior Commenting Rules**: Write self-documenting code (expressive naming, clean functions). Do NOT write redundant comments that echo the code (e.g. `-- checking if nil`). Document public API surfaces using LDoc/Moonwave syntax, and only write internal comments to explain the "Why" (engine workarounds, non-obvious logic) rather than the "What".
-7. **Mandatory Pre-Playtest Edit-Mode Map Staging**: Before asking the user to press F5 (Playtest), the AI assistant MUST instantiate and build the initial Map models, Lighting setup, and Environment structures directly into `Workspace` in Roblox Studio (via MCP `execute_luau` in Edit Mode) so the entire map is immediately previewed and clearly visible in the Studio Viewport.
+7. **Mandatory Edit-Mode Visual Staging (WYSIWYG)**: Maps, Lighting, Buildings, Props, and UI Screens (`StarterGui`) MUST be instantiated and built natively in Roblox Studio during Edit Mode (via MCP `execute_luau`) before playtesting, so everything can be inspected and monitored visually in the Studio Viewport without needing to hit F5 first.
+8. **Physical Asset Templates & Template Cloning**: For items spawned dynamically at runtime (e.g. bullets, projectiles, coins, powerups, crates, loot drops), DO NOT construct raw geometry imperatively via `Instance.new()` inside runtime scripts. Instead, instantiate pre-built, styled 3D Physical Model Templates into `ReplicatedStorage.Shared.Assets` or `ServerStorage.Templates` during Edit Mode, and simply clone (`template:Clone()`) them at runtime.
 
 ---
 
