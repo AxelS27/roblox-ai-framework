@@ -43,6 +43,8 @@
 ## 🎥 Dynamic Camera Focus & Viewport States
 `[Describe any camera zoom/focus actions triggered when interacting with elements on this screen.]`
 
+* **Camera State Mode:** `[ThirdPerson | FirstPerson | ViewportFocus | DroneCinematic | Cutscene]`
+
 | Selected Option / Action | Camera Focus Target | Distance / Zoom Offset | Easing & Duration |
 | :--- | :--- | :--- | :--- |
 | `[e.g., Selecting Hair Category]` | `[Character Head Part]` | `[Zoom In - 3 studs offset]` | `[Quad InOut - 0.4s]` |

@@ -51,6 +51,7 @@ Always adhere to these architectural patterns when writing code. **Do not use ra
 * **[Server Service Pattern](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/patterns/service-pattern.md)**: Server singletons and initialization lifecycles.
 * **[Client Controller Pattern](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/patterns/controller-pattern.md)**: Client singletons, UI/FX isolation, and remote calls.
 * **[CollectionService Component Pattern](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/patterns/component-pattern.md)**: Dynamic behavior bound to tagged Workspace parts (CollectionService).
+* **[Camera State Machine Pattern](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/patterns/camera-pattern.md)**: Client camera mode state machine (1st Person, 3rd Person, Viewport Focus, Drone Cinematic orbit).
 
 ---
 
