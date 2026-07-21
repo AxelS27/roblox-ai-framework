@@ -94,8 +94,9 @@ Any AI assistant reading this workspace must handle the following commands direc
      - Technical systems specs and config variables -> `gameplay/` (creating `gameplay/system-name/README.md` and Luau config blueprints).
      - Badges -> `monetization/badges/README.md` & `rewards.md`.
      - Gamepasses & Dev Products -> `monetization/gamepasses/README.md` & `pricing.md`.
-     - Map structure, level progression table, or biomes -> `map_design/` (writing `map_design/README.md` and `templates/world-spec.md`).
-     - UI screens flow, responsive layouts, palettes -> `ui_ux/` (writing `ui_ux/design-system.md`, components, and `templates/screen-spec.md`).
+     - Map structure, level progression table, or biomes -> `map_design/` (writing `map_design/README.md` and dedicated files for each world at `map_design/worlds/[world-name].md` using `templates/world-spec.md`).
+     - UI screens flow, responsive layouts, palettes -> `ui_ux/` (writing `ui_ux/design-system.md` and dedicated files for each UI screen/component at `ui_ux/components/[screen-name].md` using `templates/screen-spec.md`).
      - Custom mechanics (e.g. Weapons, Crafting, Game Modes) -> Create new specialized domain subfolders or markdown files inside `.agents/GDD/`.
+   - **Mandatory User Stories**: EVERY individual UI component spec file and Map world spec file MUST contain its own clear User Story section (`As a ... / I want to ... / So that ...`) to define player intent and value.
    - Overwrite the empty template skeleton structures in the workspace with these formatted, actual game design specifications.
    - Report exactly which files were created or updated.
