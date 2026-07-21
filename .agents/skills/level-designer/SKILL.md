@@ -40,7 +40,7 @@ Never generate a map using single plain box parts (`Instance.new("Part")`). Ever
 
 2. **Prop & Cover Staging Hierarchy (Gameplay Density)**:
    - **Ground Level**: Sidewalk curbs, road tiles, floor tile patterns, street markings.
-   - **Cover Props**: Wooden crates, metal oil drums, shipping containers, concrete jersey barriers, park benches, dumpsters (providing diverse hiding spots for hiders).
+   - **Cover Props**: Wooden crates, metal oil drums, shipping containers, concrete jersey barriers, park benches, dumpsters (providing diverse cover and interaction spots for players).
    - **Vertical Props**: Street lamps (with actual `PointLight` instances), hanging neon signs, wall pipes, fire escapes.
 
 ---
