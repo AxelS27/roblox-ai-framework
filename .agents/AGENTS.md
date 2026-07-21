@@ -52,6 +52,12 @@ Always adhere to these architectural patterns when writing code. **Do not use ra
 * **[Client Controller Pattern](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/patterns/controller-pattern.md)**: Client singletons, UI/FX isolation, and remote calls.
 * **[CollectionService Component Pattern](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/patterns/component-pattern.md)**: Dynamic behavior bound to tagged Workspace parts (CollectionService).
 * **[Camera State Machine Pattern](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/patterns/camera-pattern.md)**: Client camera mode state machine (1st Person, 3rd Person, Viewport Focus, Drone Cinematic orbit).
+* **[Audio System Pattern](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/patterns/audio-pattern.md)**: BGM cross-fading, UI sound effects, and spatial 3D audio.
+* **[Toast Notification Pattern](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/patterns/notification-pattern.md)**: Client toast notifications, alerts, and banner queues.
+* **[Cross-Platform Input Pattern](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/patterns/input-pattern.md)**: ContextActionService PC, Mobile, and Console control unification.
+* **[Visual Effects (VFX) Pattern](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/patterns/vfx-pattern.md)**: Client-side particle emissions, hit sparks, and Debris cleanup.
+* **[Match Lifecycle Pattern](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/patterns/gameloop-pattern.md)**: Server match state machine (Intermission -> Voting -> InGame -> Podium).
+* **[Monetization & Store Pattern](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/patterns/store-pattern.md)**: Gamepass verification and ProcessReceipt Developer Product handling.
 
 ---
 
