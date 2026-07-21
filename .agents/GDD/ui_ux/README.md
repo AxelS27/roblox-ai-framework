@@ -15,4 +15,5 @@ This folder registers all UI/UX screen mockups, responsive layouts, style tokens
   * **[tab-bar.md](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/GDD/ui_ux/components/tab-bar.md)**: Category selector tabs and indicator line tweens.
   * **[tooltip.md](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/GDD/ui_ux/components/tooltip.md)**: Hover stats cards and skill description tooltips.
   * **[player-card.md](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/GDD/ui_ux/components/player-card.md)**: Player profile popups, avatar thumbnails, and detailed stats cards.
+  * **[leaderboard.md](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/GDD/ui_ux/components/leaderboard.md)**: Custom leaderboard player lists, rank slots, and active leaderstats columns.
 * **[templates/screen-spec.md](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/GDD/ui_ux/templates/screen-spec.md)**: Template for specifying individual UI Screen GUIs.
