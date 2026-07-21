@@ -66,7 +66,7 @@ graph TD
 #### E. Map Design & Cross-World Specs (`map_design/`)
 * Identify Place IDs (Lobby/Menu, Main Game, Trade Hub).
 * Document lighting properties (Ambient, OutdoorAmbient, Shadows) and post-processing effects (DepthOfField, Bloom) into templates.
-* Write dedicated place/world files at `.agents/GDD/map_design/worlds/[world-name].md` using `templates/world-spec.md`.
+* Write dedicated place/world files at `.agents/GDD/map_design/worlds/[world-name].md` using `templates/world-spec.md` for EVERY single place registered in the Cross-World Registry (including Lobby/Menu, Trading Hubs, and separate world maps).
 
 #### F. UI/UX & Component Blueprints (`ui_ux/`)
 * Extract brand palette colors (HSL/Hex), typography, and easing styles into `ui_ux/design-system.md`.
