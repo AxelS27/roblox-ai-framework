@@ -29,6 +29,10 @@ Never create basic, flat, or plain rectangular UI elements. All interfaces must 
    - Attach `UIAspectRatioConstraint` to action buttons and icons to prevent distortion.
    - Use `UIListLayout` / `UIGridLayout` with `Padding` and `UIFlexItem` for dynamic content flows.
 
+5. **Modal Navigation & Input Control**:
+   - **Full Modal Menus (e.g. Shop, Inventory, Shop Popup)**: Must unlock mouse cursor (`Modal = true`), disable character movement controls, and automatically close or block other active open modal menus.
+   - **HUD Overlays (e.g. Match HUD, Minimap, Crosshair)**: Must stay visible without freezing player movement or locking the camera.
+
 ---
 
 ## 🌟 Standard UI Animation Effect Patterns (Replicated from Studio StarterGui)

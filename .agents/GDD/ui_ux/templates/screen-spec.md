@@ -9,6 +9,17 @@
 
 ---
 
+## 🕹️ Input Control & Navigation Behavior
+
+* **Character Movement State:** `[Disabled / Frozen (Modal Menu) | Enabled (HUD Overlay)]`
+* **Cursor Mode:** `[Unlocked / Visible (Modal Menu) | Locked Center / Hidden (HUD Overlay)]`
+* **UI Co-Existence / Stack Behavior:**
+  * **Exclusive Modal:** `[Yes (Closes or blocks all other menus when opened) | No (Can stay open alongside HUD)]`
+  * **Keybind Toggle:** `[e.g. KeyCode.Tab / KeyCode.M]`
+  * **Back / Close Trigger:** `[e.g. KeyCode.Escape / Close Button Click]`
+
+---
+
 ## 🎨 Visual Looks & Feel
 `[Describe the aesthetic properties of this UI screen (e.g. glassmorphism opacity, borders, corner rounding).]`
 
