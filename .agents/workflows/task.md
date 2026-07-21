@@ -50,7 +50,8 @@ graph TD
 * **Procedure**:
   1. Scan all domain files inside `.agents/GDD/`.
   2. Enforce the **Exhaustive GDD Mapping Invariant**: Ensure every `.md` file in `.agents/GDD/` (maps, UI components, combat matrix, mutations, soundscapes, camera, mobile controls, shop catalog) is mapped to dedicated, hyper-detailed task files.
-  3. Deconstruct features into a **Strict 5-Phase Sequential Roadmap**:
+  3. Enforce **Extreme Technical Specification & GDD Value Fidelity**: Each task file MUST copy and detail exact RGBA/Color3 values, UI frame layouts, button keybinds, species scale multipliers, camera distance targets, skill damage numbers, status effect durations, sound asset IDs, and 3D rig template paths if and only if they are explicitly defined in the GDD. If a specific value (like a color code or offset) is NOT explicitly specified in the GDD, do NOT invent arbitrary hardcoded values; reference the central GDD design tokens or describe the functional visual requirement.
+  4. Deconstruct features into a **Strict 5-Phase Sequential Roadmap**:
      * **Phase 1: Physical 3D Map & World Geometry Staging**:
        - Task 001: Map Geometry & Biomes Staging (Terrain, landmarks, sub-locations, spawns, and tagged zones in `Workspace.CurrentMap`).
        - Task 002: Physical Asset Templates & Rigs Staging (Pre-built 3D creature rigs, flora nodes, carcass props, nest base, and crystal templates in `ReplicatedStorage.Shared.Assets` per Rule 8).
@@ -62,8 +63,8 @@ graph TD
        - Separate Luau implementation tasks for: Core Bootstrappers & Net Remotes, Native Roblox Leaderstats (`Player.leaderstats` folder with DNA, Kills, Species), Cross-Platform Mobile & Touch Input Controller, Vitals Engine & Ecosystem Spawner, Evolution & Mutation System, Action Combat & Skill Engine, Dynamic World Events & Bosses, Hunting Party & Nest Territory Buffs, Dynamic Species Camera Controller, Spatial Audio & Biome Soundscape System, Client VFX & Particle Emitter Controller, and DataStore ProfileService & DevProduct/Gamepass Verification.
      * **Phase 5: Mock Multiplayer Bot Integration**:
        - Final Task: `MockPlayerService` autonomous bot simulation suite (10-20 bots, state machine, stress testing with zero errors in Studio).
-  4. Create individual task files at `tasks/XXX-name.md` following [task-blueprint.md.template](file:///d:/Experiments/Roblox%20AI%20Framework/tasks/task-blueprint.md.template).
-  5. Write the master index at [tasks/README.md](file:///d:/Experiments/Roblox%20AI%20Framework/tasks/README.md) listing all tasks under `🔴 To Do`.
+  5. Create individual task files at `tasks/XXX-name.md` following [task-blueprint.md.template](file:///d:/Experiments/Roblox%20AI%20Framework/tasks/task-blueprint.md.template).
+  6. Write the master index at [tasks/README.md](file:///d:/Experiments/Roblox%20AI%20Framework/tasks/README.md) listing all tasks under `🔴 To Do`.
 
 ### Mode 2: Reconciliation (`/task` on Updated GDD)
 * **Trigger**: Executed when GDD specs are updated or new features are added.
