@@ -63,6 +63,7 @@ Always adhere to these architectural patterns when writing code. **Do not use ra
 * **[Performance & Memory Pattern](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/patterns/performance-pattern.md)**: Mobile memory optimization, spatial partitioning queries, and render delegation.
 * **[Loading State & Preloading Pattern](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/patterns/loading-pattern.md)**: Boot asset preloading, universe teleport overlays, and map swap transition curtains.
 * **[Mock Player Testing Pattern](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/patterns/mock-player-pattern.md)**: Autonomous bot simulation, profile database injection, and multiplayer test mocking in Studio.
+* **[Lighting System Pattern](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/patterns/lighting-pattern.md)**: Atmospheric technology, skybox swapping, and post-processing tween transitions (`Atmosphere`, `Sky`, `Bloom`, `DepthOfField`, `SunRays`, `ColorCorrection`).
 
 ---
 
