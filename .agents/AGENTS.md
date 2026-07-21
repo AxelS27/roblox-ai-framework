@@ -58,6 +58,9 @@ Always adhere to these architectural patterns when writing code. **Do not use ra
 * **[Visual Effects (VFX) Pattern](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/patterns/vfx-pattern.md)**: Client-side particle emissions, hit sparks, and Debris cleanup.
 * **[Match Lifecycle Pattern](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/patterns/gameloop-pattern.md)**: Server match state machine (Intermission -> Voting -> InGame -> Podium).
 * **[Monetization & Store Pattern](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/patterns/store-pattern.md)**: Gamepass verification and ProcessReceipt Developer Product handling.
+* **[Data Persistence Pattern](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/patterns/data-pattern.md)**: ProfileService session locking, auto-reconciliation, and DataStore fallback.
+* **[Zero-Trust Security Pattern](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/patterns/security-pattern.md)**: Rate limiting, payload sanitization, NaN/Inf checks, and distance validation.
+* **[Performance & Memory Pattern](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/patterns/performance-pattern.md)**: Mobile memory optimization, spatial partitioning queries, and render delegation.
 
 ---
 
