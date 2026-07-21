@@ -77,7 +77,7 @@ graph TD
 * If the draft describes unique systems (e.g., Crafting, Skill Trees, Guilds), dynamically create new domain subfolders inside `.agents/GDD/` (e.g. `.agents/GDD/crafting/README.md`).
 
 #### H. Mandatory User Stories
-* **Mandatory constraint**: EVERY individual UI component spec file and Map world spec file MUST contain its own clear User Story section (`As a ... / I want to ... / So that ...`) to define player intent and value.
+* **Mandatory constraint**: EVERY individual UI component spec file, Map world spec file, and Character/Ability spec file MUST contain **at least 3 highly detailed, context-rich User Story entries** (using the `As a... / I want to... / So that...` structure) to define player intent, tactical scenarios, and value. Keep them descriptive rather than brief placeholders.
 
 ### Step 3: File System Synthesis & Output
 * Write all populated files to `.agents/GDD/`.
@@ -88,4 +88,6 @@ graph TD
 ## 🚫 Anti-Patterns
 * **Do NOT write monolithic files**: Never dump everything into a single 5000-line GDD file. Split specs into domain folders.
 * **Do NOT omit Luau Config Schemas**: Every gameplay mechanic MUST include a Luau code block showing the suggested config table schema.
-* **Do NOT omit User Stories**: Do not leave individual UI or World spec files without a dedicated player-facing User Story section.
+* **Do NOT omit User Stories**: Do not leave individual UI, World, or Character/Ability spec files without **at least 3 highly detailed, context-rich** player-facing User Story entries. Avoid short placeholders like "As a player, I want to play".
+
+---

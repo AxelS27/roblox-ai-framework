@@ -141,6 +141,6 @@ Any AI assistant reading this workspace must handle the following commands direc
      - Map structure, level progression table, or biomes -> `map_design/` (writing `map_design/README.md` and dedicated files for EVERY single place registered in the Cross-World Registry—including Lobby/Menu, Trading Hubs, and individual worlds—at `map_design/worlds/[world-name].md` using `templates/world-spec.md`).
      - UI screens flow, responsive layouts, palettes -> `ui_ux/` (writing `ui_ux/design-system.md` and dedicated files for each UI screen/component at `ui_ux/components/[screen-name].md` using `templates/screen-spec.md`).
      - Custom mechanics (e.g. Weapons, Crafting, Game Modes) -> Create new specialized domain subfolders or markdown files inside `.agents/GDD/`.
-   - **Mandatory User Stories**: EVERY individual UI component spec file and Map world spec file MUST contain its own clear User Story section (`As a ... / I want to ... / So that ...`) to define player intent and value.
+   - **Mandatory User Stories**: EVERY individual UI component spec, world spec, and character-ability spec file MUST contain **at least 3 highly detailed, context-rich User Story entries** (using the `As a... / I want to... / So that...` structure) to define player intent, tactical scenarios, and gameplay value. Keep them long and descriptive rather than brief placeholders.
    - Overwrite the empty template skeleton structures in the workspace with these formatted, actual game design specifications.
    - Report exactly which files were created or updated.

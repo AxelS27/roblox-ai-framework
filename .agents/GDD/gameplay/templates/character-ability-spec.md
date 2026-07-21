@@ -4,10 +4,22 @@
 
 ---
 
-## 🎭 User Story
+## 🎭 User Stories (Minimum 3 context-rich entries required)
+
+### Story 1: Basic Interaction scenario
 * **AS A** [Role / Class / Player Type]
-* **I WANT TO** [Action or gameplay capability]
-* **SO THAT I CAN** [Gameplay outcome / tactical advantage]
+* **I WANT TO** [Action or gameplay capability in normal situations]
+* **SO THAT I CAN** [Gameplay outcome / core value loop]
+
+### Story 2: Combat / Tactical situation
+* **AS A** [Role / Class / Player Type]
+* **I WANT TO** [Tactical maneuver or active ability trigger under pressure/combat]
+* **SO THAT I CAN** [Combat advantage / survival outcome]
+
+### Story 3: Faction / Progression scenario
+* **AS A** [Role / Class / Player Type]
+* **I WANT TO** [Evolution progress, faction team coordination, or economy action]
+* **SO THAT I CAN** [Long-term progression / world dominance benefit]
 
 ---
 
