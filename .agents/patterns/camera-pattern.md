@@ -48,8 +48,45 @@ local CameraController = {
 local camera = Workspace.CurrentCamera
 local player = Players.LocalPlayer
 local maid = Maid.new()
+local occludedParts: { [BasePart]: number } = {}
 
 export type CameraMode = "ThirdPerson" | "FirstPerson" | "ViewportFocus" | "DroneCinematic" | "Cutscene"
+
+-- 1. Updates line-of-sight transparency occlusion (prevents visual blocks)
+local function updateOcclusion()
+    local character = player.Character
+    if not character then return end
+    local head = character:FindFirstChild("Head")
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    if not head or (humanoid and humanoid.Health <= 0) then return end
+    
+    local rayOrigin = camera.CFrame.Position
+    local rayDirection = (head.Position - rayOrigin)
+    
+    local params = RaycastParams.new()
+    params.FilterType = Enum.RaycastFilterType.Exclude
+    params.FilterDescendantsInstances = {character}
+    
+    local result = workspace:Raycast(rayOrigin, rayDirection, params)
+    
+    -- Restore transparency for parts no longer blocking the view
+    for part, originalTrans in pairs(occludedParts) do
+        if not part or not part.Parent or not result or result.Instance ~= part then
+            part.Transparency = originalTrans
+            occludedParts[part] = nil
+        end
+    end
+    
+    -- Fade blocking part to 0.5 transparency
+    if result and result.Instance:IsA("BasePart") and not result.Instance.CanCollide then
+        local part = result.Instance
+        -- Check if it's a foliage prop, tree leaf, or thin canopy
+        if not occludedParts[part] then
+            occludedParts[part] = part.Transparency
+            part.Transparency = 0.5
+        end
+    end
+end
 
 --[=[
     Sets the active camera mode and handles smooth transitions.
@@ -111,6 +148,9 @@ end
 
 function CameraController:Init()
     print("[Client] CameraController initialized.")
+    
+    -- Bind rendering frame update for line-of-sight occlusion fading
+    RunService.RenderStepped:Connect(updateOcclusion)
 end
 
 function CameraController:Start()
@@ -118,4 +158,5 @@ function CameraController:Start()
 end
 
 return CameraController
+
 ```

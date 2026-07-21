@@ -46,9 +46,9 @@ graph TD
 * Extract character lore, NPC dialogue choices, and narrative beats into [.agents/GDD/GDD/lore.md](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/GDD/GDD/lore.md).
 
 #### B. Gameplay Systems & Luau Config Schemas (`gameplay/`)
-* Identify distinct game mechanics (e.g., Combat, Inventory, Farming, Mining, Fishing, Pets).
-* For each system, create a dedicated folder under `.agents/GDD/gameplay/[system-name]/README.md`.
-* Include a **Luau Data Structure Configuration** section showing `export type` and `table.freeze()` code mockups.
+* Identify distinct game mechanics (e.g., Sprint, HP & Recovery, Hunger, Stamina, Temperature & Climate, Status Effects, Combat Matrix, Evolution Scaling, Nests & Territory, Dynamic Events & Bosses).
+* Write a comprehensive **Master Systems Specification Document** at `.agents/GDD/gameplay/master-systems-spec.md` with complete mathematical formulas, drain rates, thresholds, recovery multipliers, status effect durations, and species combat matrices.
+* For each major sub-system, create dedicated domain folders under `.agents/GDD/gameplay/[system-name]/README.md` with Luau Data Structure Configuration schemas (`export type` and `table.freeze()`).
 
 #### C. Monetization & Progression (`monetization/`)
 * Extract Badges, unlock requirements, and technical triggers into `monetization/badges/README.md`.

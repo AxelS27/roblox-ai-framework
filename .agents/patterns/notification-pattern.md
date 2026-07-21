@@ -65,11 +65,12 @@ function NotificationController:Init()
     local gui = Instance.new("ScreenGui")
     gui.Name = "NotificationsGui"
     gui.ResetOnSpawn = false
+    gui.DisplayOrder = 100 -- Enforce high render ordering to overlay center menus
     gui.Parent = playerGui
 
     local frame = Instance.new("Frame")
     frame.Size = UDim2.new(0, 280, 0.4, 0)
-    frame.Position = UDim2.new(1, -300, 0.1, 0)
+    frame.Position = UDim2.new(0, 20, 0.3, 0) -- Positioned at middle-left to prevent clashing with native top-right leaderstats
     frame.BackgroundTransparency = 1
     frame.Parent = gui
 

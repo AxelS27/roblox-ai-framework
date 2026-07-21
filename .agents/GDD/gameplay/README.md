@@ -7,9 +7,9 @@
 ---
 
 ## 🎮 Registered Systems
-* **[system-spec.md](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/GDD/gameplay/templates/system-spec.md)**: Template for defining any technical gameplay systems.
-* `[Insert System 1 Name, e.g. inventory/README.md]`
-* `[Insert System 2 Name, e.g. combat/README.md]`
+* **[Master Systems Spec](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/GDD/gameplay/master-systems-spec.md)**: Main formulas, vitals, decay rates, and status effects.
+* **[Character & Ability Spec Template](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/GDD/gameplay/templates/character-ability-spec.md)**: Unified blueprint for character attributes, modular abilities, combat math, and animation timings.
+* **[System Spec Template](file:///d:/Experiments/Roblox%20AI%20Framework/.agents/GDD/gameplay/templates/system-spec.md)**: General system configuration template.
 
 ---
 

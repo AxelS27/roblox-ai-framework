@@ -1,80 +1,49 @@
-# UI Component Blueprint: Leaderboard (Custom Leaderstats Board)
+# Native Roblox Specification: Leaderstats (Top-Right System)
 
 > [!NOTE]
-> Component for displaying the custom in-game player list, active player stats (leaderstats columns), ranks, and player interaction rows.
+> Specification for using Roblox's built-in native `leaderstats` folder system on the top-right of the player screen instead of a custom UI panel.
 
 ---
 
-## 🛠️ Props & API Contract Schema (Luau Types)
+## 🛠️ Server Folder Structure (`Player.leaderstats`)
 
-```lua
-export type LeaderboardRowData = {
-    Rank: number,
-    UserId: number,
-    DisplayName: string,
-    Username: string,
-    Stats: { [string]: any }, -- Dynamic stat columns (e.g. Coins, Wins, Stage)
-    IsLocalPlayer: boolean,
-}
+Roblox automatically renders the top-right leaderboard when a `Folder` named `leaderstats` is parented to a `Player` instance on the server.
 
-export type LeaderboardProps = {
-    HeaderColumns: { string }, -- e.g. { "Level", "Wins", "Coins" }
-    PlayersList: { LeaderboardRowData },
-    OnPlayerClicked: (userId: number) -> (),
-}
+```luau
+-- Server script creation pattern:
+local leaderstats = Instance.new("Folder")
+leaderstats.Name = "leaderstats"
+leaderstats.Parent = player
+
+local dnaValue = Instance.new("IntValue")
+dnaValue.Name = "DNA"
+dnaValue.Value = 0
+dnaValue.Parent = leaderstats
+
+local killsValue = Instance.new("IntValue")
+killsValue.Name = "Kills"
+killsValue.Value = 0
+killsValue.Parent = leaderstats
+
+local speciesValue = Instance.new("StringValue")
+speciesValue.Name = "Species"
+speciesValue.Value = "Ant"
+speciesValue.Parent = leaderstats
 ```
 
 ---
 
-## 🌳 Roblox Instance Tree Hierarchy
+## 📋 Stat Columns & Display Specs
 
-```
-Frame (Leaderboard Outer Board - Size {0, 360, 0, 480})
-├── UICorner (CornerRadius: UDim.new(0, 16))
-├── UIStroke (Thickness: 2.5px, ApplyStrokeMode: Border, Color: Hex #2a2c3a)
-├── UIGradient (Premium dark carbon glassmorphism background gradient)
-├── Frame (Header Panel)
-│   ├── TextLabel (Board Title, e.g. "PLAYERS")
-│   └── Frame (Stat Columns Headers Row)
-│       ├── UIListLayout (Horizontal layout)
-│       └── TextLabel (Stat Column Names - Level, Wins, etc.)
-└── ScrollingFrame (Players List Container)
-    ├── UIListLayout (Vertical alignment, padding 6px)
-    └── Frame (PlayerRowTemplate - Entry row for each player)
-        ├── UICorner (CornerRadius: UDim.new(0, 8))
-        ├── UIStroke (Subtle border, glows neon highlight for LocalPlayer)
-        ├── ImageLabel (Player Avatar Headshot Thumbnail)
-        ├── TextLabel (Player Name & Username)
-        └── Frame (Stat Values Grid)
-            ├── UIListLayout (Horizontal alignment aligning with headers)
-            └── TextLabel (Value labels)
-```
+| Stat Column Name | Value Type | Description / Value Source |
+| :--- | :--- | :--- |
+| **`DNA`** | `IntValue` | Total active Evolution DNA points accumulated |
+| **`Kills`** | `IntValue` | Total rival players & apex fauna slain |
+| **`Species`** | `StringValue` | Current active creature species (Ant, Spider, Wolf, Bear, Dragon) |
 
 ---
 
-## 🎨 Visual Aesthetics & "Anti-Polos" Styling
-
-To ensure the custom leaderboard does not look like a plain solid rectangular box, follow these styling criteria:
-
-1. **Header & Local Player Highlighting**:
-   - The Local Player's row (`IsLocalPlayer == true`) must stand out visually with a gold or neon purple background gradient and a glowing border stroke (`UIStroke`).
-   - Standard rows use a translucent dark-gray backing overlay.
-
-2. **Compact Avatar Integration**:
-   - Each player row displays a small circular thumbnail of the player's headshot.
-   - Use `GetUserThumbnailAsync` to load thumbnails in real time.
-
-3. **Row Hover & Selection Feedback**:
-   - **Hover**: On `MouseEnter`, the player row slides slightly to the right (`Position X +4px` offset) and its border stroke brightens.
-   - **Click**: Triggers a click sound effect and opens the detailed **Player Profile Card** popup next to the leaderboard.
-
----
-
-## 🎭 State Transitions & Animations
-
-| Action / Event | Animation Transition | Easing & Duration | SFX |
-| :--- | :--- | :--- | :--- |
-| **Open Leaderboard** | Board slides into view from the right edge | `Back Out (0.35s)` | Page Slide sound |
-| **Close Leaderboard** | Board slides out to the right edge | `Quad In (0.25s)` | Page Slide sound |
-| **Row Hover** | Row expands horizontally and shifts right | `Quad Out (0.12s)` | Hover Tick sound |
-| **Player Joined** | New row slides in from bottom of list | `Back Out (0.3s)` | Notification Tick |
+## 🎨 Benefits & Design Rules
+1. **Zero UI Performance Overhead**: Uses native C++ engine rendering at the top-right corner of the screen.
+2. **Native Roblox UX Compatibility**: Mobile, PC, and Console players receive the familiar Roblox top-right player list automatically.
+3. **No Custom GUI Staging Needed**: Eliminates the need for custom `StarterGui.Leaderboard` ScreenGui staging.

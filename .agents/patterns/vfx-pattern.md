@@ -68,6 +68,57 @@ function EffectsController:SpawnBurstAt(cframe: CFrame, color: Color3, particleC
     Debris:AddItem(part, 1.5)
 end
 
+-- 3. Spawns floating 3D Damage Numbers (Immersive Combat Hit Feedback)
+function EffectsController:SpawnDamageNumber(position: Vector3, damage: number, isCritical: boolean?)
+    if not self:IsWithinBudget(position) then
+        return
+    end
+
+    -- Create transient anchoring part
+    local part = Instance.new("Part")
+    part.Size = Vector3.new(0.2, 0.2, 0.2)
+    part.Position = position + Vector3.new(math.random(-2, 2), 2, math.random(-2, 2))
+    part.Transparency = 1
+    part.Anchored = true
+    part.CanCollide = false
+    part.Parent = Workspace
+
+    -- Setup BillboardGui
+    local billboard = Instance.new("BillboardGui")
+    billboard.Size = UDim2.fromOffset(120, 60)
+    billboard.AlwaysOnTop = true
+    billboard.ExtentsOffset = Vector3.new(0, 1.5, 0)
+    billboard.Adornee = part
+    billboard.Parent = part
+
+    -- Setup TextLabel
+    local label = Instance.new("TextLabel")
+    label.Size = UDim2.fromScale(1, 1)
+    label.BackgroundTransparency = 1
+    label.Text = tostring(math.round(damage))
+    label.Font = Enum.Font.MontserratBold
+    label.TextSize = isCritical and 24 or 16
+    label.TextColor3 = isCritical and Color3.fromRGB(245, 158, 11) or Color3.fromRGB(239, 68, 68) -- Gold for Crit, Red for Normal
+    
+    -- Outline Stroke
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = Color3.fromRGB(0, 0, 0)
+    stroke.Thickness = 2
+    stroke.Parent = label
+    label.Parent = billboard
+
+    -- Float upward and fade out animation
+    local floatDuration = 0.8
+    local tweenInfo = TweenInfo.new(floatDuration, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+    
+    -- Tween height offset and fade
+    TweenService:Create(billboard, tweenInfo, { ExtentsOffset = Vector3.new(0, 4, 0) }):Play()
+    TweenService:Create(label, tweenInfo, { TextTransparency = 1 }):Play()
+    TweenService:Create(stroke, tweenInfo, { Transparency = 1 }):Play()
+
+    Debris:AddItem(part, floatDuration)
+end
+
 function EffectsController:Init()
     print("[Client] EffectsController initialized with Distance-Culling Budget.")
 end

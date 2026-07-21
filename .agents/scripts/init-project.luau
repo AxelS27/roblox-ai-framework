@@ -964,6 +964,497 @@ end
 return Tables
 ]==])
 
+-- Populate Utilities UIAnimate
+getOrCreateScript(utilitiesFolder, "UIAnimate", "ModuleScript", [==[--!strict
+--[=[
+    @class UIAnimate
+    @shared
+    Elite UI Animation utility refactored and expanded from JakeDev's UI Animation Pack.
+    Provides reusable, performant, and clean TweenService bindings for buttons and frames.
+]=]
+
+local TweenService = game:GetService("TweenService")
+local Lighting = game:GetService("Lighting")
+
+local UIAnimate = {}
+
+local DEFAULT_TWEEN_INFO = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
+local DEFAULT_BOUNCE_INFO = TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
+local DEFAULT_SHINE_INFO = TweenInfo.new(1.0, Enum.EasingStyle.Circular, Enum.EasingDirection.In, -1, false)
+
+-- Helper to scale UDim2
+local function scaleUDim2(orig: UDim2, scl: number): UDim2
+	return UDim2.new(
+		orig.X.Scale * scl,
+		orig.X.Offset * scl,
+		orig.Y.Scale * scl,
+		orig.Y.Offset * scl
+	)
+end
+
+-- Helper to offset UDim2 Position on Y axis
+local function offsetYUDim2(orig: UDim2, offsetScale: number): UDim2
+	return UDim2.new(
+		orig.X.Scale,
+		orig.X.Offset,
+		orig.Y.Scale + offsetScale,
+		orig.Y.Offset
+	)
+end
+
+-- 1. Bind Hover & Click Scale (Bounce Effect)
+function UIAnimate.bindHoverScale(button: GuiButton, hoverScl: number?, clickScl: number?, tInfo: TweenInfo?): () -> ()
+	local origSize = button.Size
+	local hScl = hoverScl or 1.1
+	local cScl = clickScl or 0.9
+	local info = tInfo or DEFAULT_TWEEN_INFO
+
+	local function playTween(scl: number)
+		local newSize = scaleUDim2(origSize, scl)
+		TweenService:Create(button, info, {Size = newSize}):Play()
+	end
+
+	local enterConn = button.MouseEnter:Connect(function()
+		playTween(hScl)
+	end)
+
+	local leaveConn = button.MouseLeave:Connect(function()
+		playTween(1)
+	end)
+
+	local isClicking = false
+	local clickConn = button.MouseButton1Click:Connect(function()
+		if isClicking then return end
+		isClicking = true
+		
+		local shrink = TweenService:Create(button, info, {Size = scaleUDim2(origSize, cScl)})
+		local reset = TweenService:Create(button, info, {Size = origSize})
+		
+		shrink:Play()
+		local conn
+		conn = shrink.Completed:Connect(function()
+			conn:Disconnect()
+			reset:Play()
+			local connReset
+			connReset = reset.Completed:Connect(function()
+				connReset:Disconnect()
+				isClicking = false
+			end)
+		end)
+	end)
+
+	return function()
+		enterConn:Disconnect()
+		leaveConn:Disconnect()
+		clickConn:Disconnect()
+	end
+end
+
+-- 2. Bind Color Shift on Hover (Supports Background, Image, and Text Colors)
+function UIAnimate.bindHoverColor(button: GuiButton, hoverColor: Color3, originalColor: Color3, tInfo: TweenInfo?): () -> ()
+	local info = tInfo or DEFAULT_TWEEN_INFO
+
+	-- Determine target property
+	local targetProperty = "BackgroundColor3"
+	if button:IsA("ImageButton") then
+		targetProperty = "ImageColor3"
+	elseif button:IsA("TextButton") and not button.BackgroundTransparency == 1 then
+		targetProperty = "BackgroundColor3"
+	elseif button:IsA("TextButton") then
+		targetProperty = "TextColor3"
+	end
+
+	local enterConn = button.MouseEnter:Connect(function()
+		TweenService:Create(button, info, {[targetProperty] = hoverColor}):Play()
+	end)
+
+	local leaveConn = button.MouseLeave:Connect(function()
+		TweenService:Create(button, info, {[targetProperty] = originalColor}):Play()
+	end)
+
+	return function()
+		enterConn:Disconnect()
+		leaveConn:Disconnect()
+	end
+end
+
+-- 3. Bind UIStroke Thickness Scale on Hover
+function UIAnimate.bindStrokeScale(button: GuiButton, stroke: UIStroke, hoverThickOffset: number?, tInfo: TweenInfo?): () -> ()
+	local origThick = stroke.Thickness
+	local hoverThick = origThick + (hoverThickOffset or 2)
+	local info = tInfo or DEFAULT_TWEEN_INFO
+
+	local enterConn = button.MouseEnter:Connect(function()
+		TweenService:Create(stroke, info, {Thickness = hoverThick}):Play()
+	end)
+
+	local leaveConn = button.MouseLeave:Connect(function()
+		TweenService:Create(stroke, info, {Thickness = origThick}):Play()
+	end)
+
+	return function()
+		enterConn:Disconnect()
+		leaveConn:Disconnect()
+	end
+end
+
+-- 4. Bind UIStroke Visibility Toggle on Hover
+function UIAnimate.bindStrokeVisibility(button: GuiButton, stroke: UIStroke, tInfo: TweenInfo?): () -> ()
+	local info = tInfo or DEFAULT_TWEEN_INFO
+
+	stroke.Enabled = false
+
+	local enterConn = button.MouseEnter:Connect(function()
+		stroke.Enabled = true
+		stroke.Transparency = 1
+		TweenService:Create(stroke, info, {Transparency = 0}):Play()
+	end)
+
+	local leaveConn = button.MouseLeave:Connect(function()
+		local tween = TweenService:Create(stroke, info, {Transparency = 1})
+		tween:Play()
+		local conn
+		conn = tween.Completed:Connect(function()
+			conn:Disconnect()
+			if not stroke.Enabled then return end
+			stroke.Enabled = false
+		end)
+	end)
+
+	return function()
+		enterConn:Disconnect()
+		leaveConn:Disconnect()
+	end
+end
+
+-- 5. Bind Icon Wiggle Rotation on Hover
+function UIAnimate.bindIconWiggle(button: GuiButton, icon: ImageLabel, wiggleRotOffset: number?, tInfo: TweenInfo?): () -> ()
+	local origRot = icon.Rotation
+	local wiggleRot = wiggleRotOffset or 10
+	local info = tInfo or DEFAULT_TWEEN_INFO
+	local isClicking = false
+
+	local enterConn = button.MouseEnter:Connect(function()
+		if isClicking then return end
+		local tweens = {
+			TweenService:Create(icon, info, {Rotation = wiggleRot}),
+			TweenService:Create(icon, info, {Rotation = -wiggleRot}),
+			TweenService:Create(icon, info, {Rotation = wiggleRot}),
+			TweenService:Create(icon, info, {Rotation = origRot})
+		}
+		
+		tweens[1]:Play()
+		for i = 1, #tweens - 1 do
+			local conn
+			conn = tweens[i].Completed:Connect(function()
+				conn:Disconnect()
+				tweens[i + 1]:Play()
+			end)
+		end
+	end)
+
+	local leaveConn = button.MouseLeave:Connect(function()
+		if isClicking then return end
+		TweenService:Create(icon, info, {Rotation = origRot}):Play()
+	end)
+
+	return function()
+		enterConn:Disconnect()
+		leaveConn:Disconnect()
+	end
+end
+
+-- 6. Bind Rotate & Scale Hover (Simulator Button Effect)
+function UIAnimate.bindRotateHoverScale(button: GuiButton, hoverScl: number?, hoverRot: number?, clickScl: number?, tInfo: TweenInfo?): () -> ()
+	local origSize = button.Size
+	local hScl = hoverScl or 1.1
+	local hRot = hoverRot or 10
+	local cScl = clickScl or 0.9
+	local info = tInfo or DEFAULT_TWEEN_INFO
+
+	local function playTween(scl: number, rot: number)
+		local newSize = scaleUDim2(origSize, scl)
+		TweenService:Create(button, info, {Size = newSize, Rotation = rot}):Play()
+	end
+
+	local enterConn = button.MouseEnter:Connect(function()
+		playTween(hScl, hRot)
+	end)
+
+	local leaveConn = button.MouseLeave:Connect(function()
+		playTween(1, 0)
+	end)
+
+	local isClicking = false
+	local clickConn = button.MouseButton1Click:Connect(function()
+		if isClicking then return end
+		isClicking = true
+		
+		local shrink = TweenService:Create(button, info, {Size = scaleUDim2(origSize, cScl), Rotation = 0})
+		local reset = TweenService:Create(button, info, {Size = origSize, Rotation = 0})
+		
+		shrink:Play()
+		local conn
+		conn = shrink.Completed:Connect(function()
+			conn:Disconnect()
+			reset:Play()
+			local connReset
+			connReset = reset.Completed:Connect(function()
+				connReset:Disconnect()
+				isClicking = false
+			end)
+		end)
+	end)
+
+	return function()
+		enterConn:Disconnect()
+		leaveConn:Disconnect()
+		clickConn:Disconnect()
+	end
+end
+
+-- 7. Bind Position Bounce on Click
+function UIAnimate.bindClickBouncePos(button: GuiButton, hoverScl: number?, bounceUpScale: number?, bounceDownScale: number?, tInfo: TweenInfo?): () -> ()
+	local origSize = button.Size
+	local origPos = button.Position
+	local hScl = hoverScl or 1.1
+	local bUp = bounceUpScale or -0.02
+	local bDown = bounceDownScale or 0.02
+	local info = tInfo or DEFAULT_TWEEN_INFO
+	local isClicking = false
+
+	local function sizeTween(scl: number)
+		return TweenService:Create(button, info, {Size = scaleUDim2(origSize, scl)})
+	end
+
+	local function posTween(offsetY: number)
+		return TweenService:Create(button, info, {Position = offsetYUDim2(origPos, offsetY)})
+	end
+
+	local enterConn = button.MouseEnter:Connect(function()
+		if not isClicking then
+			sizeTween(hScl):Play()
+		end
+	end)
+
+	local leaveConn = button.MouseLeave:Connect(function()
+		if not isClicking then
+			sizeTween(1):Play()
+		end
+	end)
+
+	local clickConn = button.MouseButton1Click:Connect(function()
+		if isClicking then return end
+		isClicking = true
+
+		local tweens = {
+			sizeTween(1),
+			posTween(bUp),
+			posTween(bDown),
+			posTween(0)
+		}
+
+		tweens[1]:Play()
+		for i = 1, #tweens - 1 do
+			local conn
+			conn = tweens[i].Completed:Connect(function()
+				conn:Disconnect()
+				tweens[i + 1]:Play()
+			end)
+		end
+
+		local connEnd
+		connEnd = tweens[#tweens].Completed:Connect(function()
+			connEnd:Disconnect()
+			isClicking = false
+		end)
+	end)
+
+	return function()
+		enterConn:Disconnect()
+		leaveConn:Disconnect()
+		clickConn:Disconnect()
+	end
+end
+
+-- 8. Bind RileyBytes Shiny Button Effect
+function UIAnimate.bindShineEffect(button: GuiButton, shineFrame: Frame, tInfo: TweenInfo?): () -> ()
+	local info = tInfo or DEFAULT_SHINE_INFO
+	
+	shineFrame.Position = UDim2.fromScale(-0.5, 0.5)
+	local tween = TweenService:Create(shineFrame, info, {Position = UDim2.fromScale(1.5, 0.5)})
+	tween:Play()
+
+	return function()
+		tween:Cancel()
+	end
+end
+
+-- 9. Toggle Scale Pop Frame Transition (Using UIScale & EasingStyle.Back)
+function UIAnimate.toggleScalePop(frame: GuiObject, isOpen: boolean, tInfoIn: TweenInfo?, tInfoOut: TweenInfo?): () -> ()
+	local scale = frame:FindFirstChildOfClass("UIScale") :: UIScale?
+	if not scale then
+		scale = Instance.new("UIScale")
+		scale.Parent = frame
+	end
+	
+	local uiScale = scale :: UIScale
+	local infoIn = tInfoIn or TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
+	local infoOut = tInfoOut or TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+
+	if isOpen then
+		frame.Visible = true
+		uiScale.Scale = 0
+		TweenService:Create(uiScale, infoIn, {Scale = 1}):Play()
+	else
+		local shrink = TweenService:Create(uiScale, infoOut, {Scale = 0})
+		shrink:Play()
+		local conn
+		conn = shrink.Completed:Connect(function()
+			conn:Disconnect()
+			if uiScale.Scale == 0 then
+				frame.Visible = false
+			end
+		end)
+	end
+
+	return function() end
+end
+
+-- 10. Standalone Popup Frame Transition (Size & Transparency)
+function UIAnimate.popup(frame: GuiObject, origSize: UDim2, isOpen: boolean, tInfo: TweenInfo?): () -> ()
+	local info = tInfo or DEFAULT_TWEEN_INFO
+
+	if isOpen then
+		frame.Visible = true
+		TweenService:Create(frame, info, {
+			Size = origSize,
+			BackgroundTransparency = 0
+		}):Play()
+	else
+		local tween = TweenService:Create(frame, info, {
+			Size = UDim2.new(0, 0, 0, 0),
+			BackgroundTransparency = 1
+		})
+		tween:Play()
+		local conn
+		conn = tween.Completed:Connect(function()
+			conn:Disconnect()
+			frame.Visible = false
+		end)
+	end
+
+	return function() end
+end
+
+-- 11. Standalone Bouncing Frame Transition (Elastic Bouncy Zoom)
+function UIAnimate.bounce(frame: GuiObject, origSize: UDim2, isOpen: boolean, tInfo: TweenInfo?): () -> ()
+	local info = tInfo or DEFAULT_BOUNCE_INFO
+
+	local function makeSizeTween(scl: number, alpha: number)
+		return TweenService:Create(frame, info, {
+			Size = scaleUDim2(origSize, scl),
+			BackgroundTransparency = alpha
+		})
+	end
+
+	if isOpen then
+		frame.Visible = true
+		local tweens = {
+			makeSizeTween(1.2, 0),
+			makeSizeTween(0.8, 0),
+			makeSizeTween(1.0, 0)
+		}
+		
+		tweens[1]:Play()
+		for i = 1, #tweens - 1 do
+			local conn
+			conn = tweens[i].Completed:Connect(function()
+				conn:Disconnect()
+				tweens[i + 1]:Play()
+			end)
+		end
+	else
+		local tween = makeSizeTween(0, 1)
+		tween:Play()
+		local conn
+		conn = tween.Completed:Connect(function()
+			conn:Disconnect()
+			frame.Visible = false
+		end)
+	end
+
+	return function() end
+end
+
+-- 12. Standalone Rotate In Frame Transition
+function UIAnimate.rotateIn(frame: GuiObject, origSize: UDim2, startRot: number?, isOpen: boolean, tInfo: TweenInfo?): () -> ()
+	local info = tInfo or DEFAULT_TWEEN_INFO
+	local rotVal = startRot or 15
+
+	if isOpen then
+		frame.Visible = true
+		frame.Rotation = rotVal
+		TweenService:Create(frame, info, {
+			Size = origSize,
+			BackgroundTransparency = 0,
+			Rotation = 0
+		}):Play()
+	else
+		local tween = TweenService:Create(frame, info, {
+			Size = UDim2.new(0, 0, 0, 0),
+			BackgroundTransparency = 1,
+			Rotation = rotVal
+		})
+		tween:Play()
+		local conn
+		conn = tween.Completed:Connect(function()
+			conn:Disconnect()
+			frame.Visible = false
+		end)
+	end
+
+	return function() end
+end
+
+-- 13. Standalone FOV & Screen Blur Camera Transition
+function UIAnimate.fovTransition(frame: GuiObject, origSize: UDim2, isOpen: boolean, tInfo: TweenInfo?): () -> ()
+	local info = tInfo or DEFAULT_TWEEN_INFO
+	local camera = workspace.CurrentCamera
+	
+	local blur = Lighting:FindFirstChild("UIBlurEffect") :: BlurEffect?
+	if not blur then
+		local newBlur = Instance.new("BlurEffect")
+		newBlur.Name = "UIBlurEffect"
+		newBlur.Size = 0
+		newBlur.Parent = Lighting
+		blur = newBlur
+	end
+
+	if isOpen then
+		frame.Visible = true
+		TweenService:Create(frame, info, {Size = origSize, BackgroundTransparency = 0}):Play()
+		TweenService:Create(camera, info, {FieldOfView = 80}):Play()
+		TweenService:Create(blur, info, {Size = 20}):Play()
+	else
+		local frameTween = TweenService:Create(frame, info, {Size = UDim2.new(0, 0, 0, 0), BackgroundTransparency = 1})
+		frameTween:Play()
+		TweenService:Create(camera, info, {FieldOfView = 70}):Play()
+		TweenService:Create(blur, info, {Size = 0}):Play()
+		
+		local conn
+		conn = frameTween.Completed:Connect(function()
+			conn:Disconnect()
+			frame.Visible = false
+		end)
+	end
+
+	return function() end
+end
+
+return UIAnimate
+]==])
+
 -- Populate Server Bootstrap
 getOrCreateScript(serverFolder, "Bootstrap", "Script", [==[--!strict
 --[=[
@@ -1099,6 +1590,73 @@ end
 return ExampleService
 ]==])
 
+-- Populate Server DebugService
+getOrCreateScript(servicesFolder, "DebugService", "ModuleScript", [==[--!strict
+--[=[
+    @class DebugService
+    @server
+    Secured developer-only console execution backend.
+]=]
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+
+local Shared = ReplicatedStorage:WaitForChild("Shared")
+local Net = require(Shared:WaitForChild("Network"):WaitForChild("Net"))
+
+local DebugService = {
+    Name = "DebugService",
+    AuthorizedUsers = {
+        [game.CreatorId] = true,
+    }
+}
+
+function DebugService:IsAuthorized(player: Player): boolean
+    if RunService:IsStudio() then
+        return true
+    end
+    return self.AuthorizedUsers[player.UserId] == true
+end
+
+function DebugService:Init()
+    local debugCmdEvent = Net:Event("DebugCommand")
+
+    debugCmdEvent.OnServerEvent:Connect(function(player: Player, commandName: string, ...: any)
+        if not self:IsAuthorized(player) then
+            warn("[Security] Unauthorized debug command by player: " .. player.Name)
+            return
+        end
+
+        local args = {...}
+        print(string.format("[Debug] Admin %s ran command: %s", player.Name, commandName))
+
+        if commandName == "AddDNA" then
+            local stats = player:FindFirstChild("leaderstats")
+            if stats then
+                local dnaVal = stats:FindFirstChild("DNA") or stats:FindFirstChild("Dna")
+                if dnaVal and dnaVal:IsA("ValueObject") then
+                    (dnaVal :: any).Value = ((dnaVal :: any).Value or 0) + (args[1] or 1000)
+                end
+            end
+        elseif commandName == "SkipTimer" then
+            -- Custom match/timer skip callbacks can be triggered here
+        elseif commandName == "ToggleGodMode" then
+            local char = player.Character
+            if char then
+                local hum = char:FindFirstChildOfClass("Humanoid")
+                if hum then
+                    hum.MaxHealth = math.huge
+                    hum.Health = math.huge
+                end
+            end
+        end
+    end)
+end
+
+return DebugService
+]==])
+
+
 -- Populate Client ExampleController
 getOrCreateScript(controllersFolder, "ExampleController", "ModuleScript", [==[--strict
 --[=[
@@ -1131,6 +1689,424 @@ end
 
 return ExampleController
 ]==])
+
+-- Populate Client AudioController
+getOrCreateScript(controllersFolder, "AudioController", "ModuleScript", [==[--!strict
+--[=[
+    @class AudioController
+    @client
+    Manages client-side BGM cross-fading, automatic UI sound effects, and spatial 3D audio.
+]=]
+local SoundService = game:GetService("SoundService")
+local ContentProvider = game:GetService("ContentProvider")
+local TweenService = game:GetService("TweenService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+
+local Shared = ReplicatedStorage:WaitForChild("Shared")
+local Packages = Shared:WaitForChild("Packages")
+local Maid = require(Packages:WaitForChild("Maid"))
+
+local AudioController = {
+    Name = "AudioController",
+    CurrentBGM = nil :: Sound?,
+    
+    Sounds = {
+        UI_HOVER = "rbxassetid://9119565538",
+        UI_CLICK = "rbxassetid://9119565614",
+        EVOLVE = "rbxassetid://9123891039",
+        EAT = "rbxassetid://9114223126",
+    }
+}
+
+local bgmGroup: SoundGroup
+local sfxGroup: SoundGroup
+local maid = Maid.new()
+
+function AudioController:PlaySFX(soundId: string, volume: number?, pitch: number?)
+    local sound = Instance.new("Sound")
+    sound.SoundId = soundId
+    sound.Volume = volume or 0.4
+    sound.PlaybackSpeed = pitch or 1.0
+    sound.SoundGroup = sfxGroup
+    sound.Parent = SoundService
+
+    sound:Play()
+    sound.Ended:Connect(function()
+        sound:Destroy()
+    end)
+end
+
+function AudioController:PlaySpatialSFX(soundId: string, target: Vector3 | BasePart, maxDistance: number?, volume: number?, pitch: number?)
+    local sound = Instance.new("Sound")
+    sound.SoundId = soundId
+    sound.Volume = volume or 0.5
+    sound.PlaybackSpeed = pitch or 1.0
+    sound.SoundGroup = sfxGroup
+    sound.RollOffMode = Enum.RollOffMode.Linear
+    sound.MaxDistance = maxDistance or 60
+
+    if typeof(target) == "Vector3" then
+        local attachment = Instance.new("Attachment")
+        attachment.WorldPosition = target
+        attachment.Parent = workspace.Terrain
+        
+        sound.Parent = attachment
+        sound:Play()
+        sound.Ended:Connect(function()
+            sound:Destroy()
+            attachment:Destroy()
+        end)
+    elseif target:IsA("BasePart") then
+        sound.Parent = target
+        sound:Play()
+        sound.Ended:Connect(function()
+            sound:Destroy()
+        end)
+    end
+end
+
+function AudioController:PlayBGM(soundId: string, fadeDuration: number?)
+    local fadeTime = fadeDuration or 1.5
+
+    if self.CurrentBGM then
+        local oldBGM = self.CurrentBGM
+        local fadeOut = TweenService:Create(oldBGM, TweenInfo.new(fadeTime), { Volume = 0 })
+        fadeOut:Play()
+        fadeOut.Completed:Connect(function()
+            oldBGM:Stop()
+            oldBGM:Destroy()
+        end)
+    end
+
+    local newBGM = Instance.new("Sound")
+    newBGM.SoundId = soundId
+    newBGM.Volume = 0
+    newBGM.Looped = true
+    newBGM.SoundGroup = bgmGroup
+    newBGM.Parent = SoundService
+
+    self.CurrentBGM = newBGM
+    newBGM:Play()
+
+    TweenService:Create(newBGM, TweenInfo.new(fadeTime), { Volume = 0.3 }):Play()
+end
+
+function AudioController:BindUISounds(parent: Instance)
+    local function applyTo(instance: Instance)
+        if instance:IsA("GuiButton") then
+            instance.MouseEnter:Connect(function()
+                self:PlaySFX(self.Sounds.UI_HOVER, 0.2, 1.1)
+            end)
+            instance.MouseButton1Click:Connect(function()
+                self:PlaySFX(self.Sounds.UI_CLICK, 0.35, 1.0)
+            end)
+        end
+        for _, child in instance:GetChildren() do
+            applyTo(child)
+        end
+    end
+    applyTo(parent)
+end
+
+function AudioController:Init()
+    bgmGroup = SoundService:FindFirstChild("BGM") or Instance.new("SoundGroup")
+    bgmGroup.Name = "BGM"
+    bgmGroup.Parent = SoundService
+
+    sfxGroup = SoundService:FindFirstChild("SFX") or Instance.new("SoundGroup")
+    sfxGroup.Name = "SFX"
+    sfxGroup.Parent = SoundService
+    
+    local playerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
+    playerGui.ChildAdded:Connect(function(child)
+        self:BindUISounds(child)
+    end)
+    
+    for _, child in playerGui:GetChildren() do
+        self:BindUISounds(child)
+    end
+end
+
+return AudioController
+]==])
+
+-- Populate Client EffectsController
+getOrCreateScript(controllersFolder, "EffectsController", "ModuleScript", [==[--!strict
+--[=[
+    @class EffectsController
+    @client
+    Manages client-side particle emissions, distance culling, and floating 3D damage numbers.
+]=]
+local Workspace = game:GetService("Workspace")
+local Debris = game:GetService("Debris")
+local TweenService = game:GetService("TweenService")
+
+local MAX_VFX_DISTANCE = 150
+
+local EffectsController = {
+    Name = "EffectsController"
+}
+
+function EffectsController:IsWithinBudget(targetPosition: Vector3, customDistance: number?): boolean
+    local camera = Workspace.CurrentCamera
+    if not camera then return false end
+
+    local distance = (camera.CFrame.Position - targetPosition).Magnitude
+    return distance <= (customDistance or MAX_VFX_DISTANCE)
+end
+
+function EffectsController:EmitParticles(emitterTemplate: ParticleEmitter, attachment: Attachment, count: number)
+    if not self:IsWithinBudget(attachment.WorldPosition) then
+        return
+    end
+
+    local clone = emitterTemplate:Clone()
+    clone.Parent = attachment
+    clone:Emit(count)
+
+    Debris:AddItem(clone, clone.Lifetime.Max + 1)
+end
+
+function EffectsController:SpawnBurstAt(cframe: CFrame, color: Color3, particleCount: number?)
+    if not self:IsWithinBudget(cframe.Position) then
+        return
+    end
+
+    local part = Instance.new("Part")
+    part.Size = Vector3.new(0.2, 0.2, 0.2)
+    part.CFrame = cframe
+    part.Transparency = 1
+    part.Anchored = true
+    part.CanCollide = false
+    part.Parent = Workspace
+
+    local emitter = Instance.new("ParticleEmitter")
+    emitter.Color = ColorSequence.new(color)
+    emitter.Size = NumberSequence.new(0.5, 0)
+    emitter.Speed = NumberRange.new(5, 12)
+    emitter.Lifetime = NumberRange.new(0.5, 1)
+    emitter.Parent = part
+
+    emitter:Emit(particleCount or 20)
+    Debris:AddItem(part, 1.5)
+end
+
+function EffectsController:SpawnDamageNumber(position: Vector3, damage: number, isCritical: boolean?)
+    if not self:IsWithinBudget(position) then
+        return
+    end
+
+    local part = Instance.new("Part")
+    part.Size = Vector3.new(0.2, 0.2, 0.2)
+    part.Position = position + Vector3.new(math.random(-2, 2), 2, math.random(-2, 2))
+    part.Transparency = 1
+    part.Anchored = true
+    part.CanCollide = false
+    part.Parent = Workspace
+
+    local billboard = Instance.new("BillboardGui")
+    billboard.Size = UDim2.fromOffset(120, 60)
+    billboard.AlwaysOnTop = true
+    billboard.ExtentsOffset = Vector3.new(0, 1.5, 0)
+    billboard.Adornee = part
+    billboard.Parent = part
+
+    local label = Instance.new("TextLabel")
+    label.Size = UDim2.fromScale(1, 1)
+    label.BackgroundTransparency = 1
+    label.Text = tostring(math.round(damage))
+    label.Font = Enum.Font.MontserratBold
+    label.TextSize = isCritical and 24 or 16
+    label.TextColor3 = isCritical and Color3.fromRGB(245, 158, 11) or Color3.fromRGB(239, 68, 68)
+    
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = Color3.fromRGB(0, 0, 0)
+    stroke.Thickness = 2
+    stroke.Parent = label
+    label.Parent = billboard
+
+    local floatDuration = 0.8
+    local tweenInfo = TweenInfo.new(floatDuration, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+    
+    TweenService:Create(billboard, tweenInfo, { ExtentsOffset = Vector3.new(0, 4, 0) }):Play()
+    TweenService:Create(label, tweenInfo, { TextTransparency = 1 }):Play()
+    TweenService:Create(stroke, tweenInfo, { Transparency = 1 }):Play()
+
+    Debris:AddItem(part, floatDuration)
+end
+
+function EffectsController:Init()
+    print("[Client] EffectsController initialized with Distance-Culling.")
+end
+
+return EffectsController
+]==])
+
+-- Populate Client DebugController
+getOrCreateScript(controllersFolder, "DebugController", "ModuleScript", [==[--!strict
+--[=[
+    @class DebugController
+    @client
+    Manages developer debug UI panel overlays and debug inputs.
+]=]
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+
+local Shared = ReplicatedStorage:WaitForChild("Shared")
+local Net = require(Shared:WaitForChild("Network"):WaitForChild("Net"))
+
+local DebugController = {
+    Name = "DebugController"
+}
+
+function DebugController:ExecuteCommand(commandName: string, ...: any)
+    Net:Event("DebugCommand"):FireServer(commandName, ...)
+end
+
+function DebugController:Init()
+    -- Open Debug menu on pressing semicolon (;) in Studio or if authorized
+    UserInputService.InputBegan:Connect(function(input, processed)
+        if processed then return end
+        if input.KeyCode == Enum.KeyCode.Semicolon then
+            print("[Debug] Semicolon key pressed. Toggling Developer Debug UI Panel...")
+            -- Trigger dev panel UI toggle here
+        end
+    end)
+end
+
+return DebugController
+]==])
+
+-- Populate Client CameraController
+getOrCreateScript(controllersFolder, "CameraController", "ModuleScript", [==[--!strict
+--[=[
+    @class CameraController
+    @client
+    Manages client-side camera state machine and line-of-sight transparency occlusion.
+]=]
+local Workspace = game:GetService("Workspace")
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Shared = ReplicatedStorage:WaitForChild("Shared")
+local Packages = Shared:WaitForChild("Packages")
+local Maid = require(Packages:WaitForChild("Maid"))
+
+local CameraController = {
+    Name = "CameraController",
+    CurrentState = "ThirdPerson",
+}
+
+local camera = Workspace.CurrentCamera
+local player = Players.LocalPlayer
+local maid = Maid.new()
+local occludedParts: { [BasePart]: number } = {}
+
+export type CameraMode = "ThirdPerson" | "FirstPerson" | "ViewportFocus" | "DroneCinematic" | "Cutscene"
+
+local function updateOcclusion()
+    local character = player.Character
+    if not character then return end
+    local head = character:FindFirstChild("Head")
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    if not head or (humanoid and humanoid.Health <= 0) then return end
+    
+    local rayOrigin = camera.CFrame.Position
+    local rayDirection = (head.Position - rayOrigin)
+    
+    local params = RaycastParams.new()
+    params.FilterType = Enum.RaycastFilterType.Exclude
+    params.FilterDescendantsInstances = {character}
+    
+    local result = workspace:Raycast(rayOrigin, rayDirection, params)
+    
+    for part, originalTrans in pairs(occludedParts) do
+        if not part or not part.Parent or not result or result.Instance ~= part then
+            part.Transparency = originalTrans
+            occludedParts[part] = nil
+        end
+    end
+    
+    if result and result.Instance:IsA("BasePart") and not result.Instance.CanCollide then
+        local part = result.Instance
+        if not occludedParts[part] then
+            occludedParts[part] = part.Transparency
+            part.Transparency = 0.5
+        end
+    end
+end
+
+function CameraController:SetState(mode: CameraMode, focusTarget: (BasePart | CFrame)?, duration: number?)
+    maid:DoCleaning()
+    self.CurrentState = mode
+
+    local transitionTime = duration or 0.5
+
+    if mode == "ThirdPerson" then
+        camera.CameraType = Enum.CameraType.Custom
+        player.CameraMinZoomDistance = 5
+        player.CameraMaxZoomDistance = 25
+        camera.CameraSubject = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+
+    elseif mode == "FirstPerson" then
+        camera.CameraType = Enum.CameraType.Custom
+        player.CameraMinZoomDistance = 0.5
+        player.CameraMaxZoomDistance = 0.5
+        camera.CameraSubject = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+
+    elseif mode == "ViewportFocus" then
+        assert(focusTarget, "ViewportFocus state requires a target BasePart or CFrame")
+        camera.CameraType = Enum.CameraType.Scriptable
+
+        local targetCFrame: CFrame
+        if typeof(focusTarget) == "Instance" and (focusTarget :: Instance):IsA("BasePart") then
+            targetCFrame = (focusTarget :: BasePart).CFrame * CFrame.new(0, 1.5, 6)
+        else
+            targetCFrame = focusTarget :: CFrame
+        end
+
+        TweenService:Create(camera, TweenInfo.new(transitionTime, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+            CFrame = targetCFrame,
+            FieldOfView = 60
+        }):Play()
+
+    elseif mode == "DroneCinematic" then
+        camera.CameraType = Enum.CameraType.Scriptable
+        local centerPoint = (typeof(focusTarget) == "CFrame" and focusTarget) or (player.Character and player.Character:GetPivot()) or CFrame.new(0, 10, 0)
+        local radius = 35
+        local speed = 0.3
+        local angle = 0
+
+        maid:GiveTask(RunService.RenderStepped:Connect(function(dt)
+            angle += dt * speed
+            local x = math.cos(angle) * radius
+            local z = math.sin(angle) * radius
+            local camPos = centerPoint.Position + Vector3.new(x, 18, z)
+            camera.CFrame = CFrame.lookAt(camPos, centerPoint.Position)
+        end))
+    end
+end
+
+function CameraController:Init()
+    print("[Client] CameraController initialized.")
+    RunService.RenderStepped:Connect(updateOcclusion)
+end
+
+function CameraController:Start()
+    self:SetState("ThirdPerson")
+end
+
+return CameraController
+]==])
+
+
+
+
 
 -- Populate Server ExampleComponent
 getOrCreateScript(serverComponentsFolder, "ExampleComponent", "ModuleScript", [==[--!strict
