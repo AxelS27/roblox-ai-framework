@@ -712,8 +712,9 @@ end
     Creates a Promise that is already resolved with the given values.
 ]=]
 function Promise.resolve(...: any): Self
+    local args = { ... }
     return Promise.new(function(resolve)
-        resolve(...)
+        resolve(table.unpack(args))
     end)
 end
 

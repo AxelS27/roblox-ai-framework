@@ -77,7 +77,7 @@ graph TD
 * **Trigger**: User prompts in chat: *"Execute task 001"* or *"Run task 002"*.
 * **Procedure**:
   1. **Update Status to In Progress**: Mark status to `🟡 In Progress` in `tasks/README.md` and `tasks/XXX-name.md`.
-  2. **Read Task Requirements**: Read the target task file completely.
+  2. **Read Task Requirements & Relevant Local Skills**: Read the target task file completely. Identify the domain of the task (e.g., Level Design, UI Design, Security, Backend, Roblox Engine, Software Architecture) and ALWAYS read the corresponding local skill instruction file inside `.agents/skills/<domain-name>/SKILL.md` using `view_file` (with `IsSkillFile = true`) before writing or modifying code.
   3. **Execute Code Changes**: Modify or create target Luau modules in `src/`.
   4. **Professional SE Testing Protocol**:
      * **Unit/Integration Testing**: Run Luau unit testing scripts in Roblox Studio using MCP `execute_luau`.

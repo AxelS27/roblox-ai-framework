@@ -2,10 +2,57 @@
 
 ---
 
-## 👥 User Story
-* **As a** `[Player/Developer]`
-* **I want to** `[perform action / open UI / change state]`
-* **So that** `[value/benefit is achieved]`
+## 👥 User Stories (Target 10+ entries from diverse POVs, states & conditions)
+
+### Story 1: New / First-Time Player POV
+* **As a** `[New Player]`
+* **I want to** `[see intuitive visual icons and prominent close buttons]`
+* **So that** `[I can navigate this screen without needing a manual]`
+
+### Story 2: Veteran / Power User PC POV
+* **As a** `[PC Power User]`
+* **I want to** `[toggle this menu via quick keyboard hotkeys (e.g. Tab, M, B, Esc)]`
+* **So that** `[I can perform actions instantly without mouse clicks]`
+
+### Story 3: Mobile Touch HUD POV
+* **As a** `[Mobile / iPad Player]`
+* **I want to** `[access this screen via a dedicated frosted HUD button with safe-margin placement]`
+* **So that** `[I never experience touch overlap with native controls]`
+
+### Story 4: Mid-Combat / In-Game Overlay Condition
+* **As a** `[Player Opening Menu in Danger Zone]`
+* **I want to** `[have non-blocking semi-transparent glassmorphic panels]`
+* **So that** `[I can still see incoming threats in the peripheral background]`
+
+### Story 5: Low Health / Warning State Condition
+* **As a** `[Player at Low Health]`
+* **I want to** `[see glowing red vital alerts prioritized above modal panels]`
+* **So that** `[I'm warned if taking damage while managing UI]`
+
+### Story 6: Audio & Tactile Sensory Feedback State
+* **As a** `[Player Interacting with Buttons]`
+* **I want to** `[hear hover sounds and click SFX with subtle UI scale animations]`
+* **So that** `[every interaction feels tactile and satisfying]`
+
+### Story 7: Purchase / DevProduct Trigger Condition
+* **As a** `[Gamepass / Product Buyer]`
+* **I want to** `[trigger Roblox native purchase prompts directly from shop buttons]`
+* **So that** `[I can complete purchases seamlessly]`
+
+### Story 8: Reconnection / State Refresh Condition
+* **As a** `[Player Reconnecting After Desync]`
+* **I want to** `[have the UI automatically re-sync with server state]`
+* **So that** `[I don't view stale data or broken counters]`
+
+### Story 9: Multi-Language / Localization Edge Case
+* **As a** `[Non-English Player]`
+* **I want to** `[have auto-scaling text labels and localizable text keys]`
+* **So that** `[translated text never clips or overflows frames]`
+
+### Story 10: In-World Proximity Trigger POV
+* **As a** `[Player Approaching In-World NPC/Booth]`
+* **I want to** `[trigger this panel via a ProximityPrompt and auto-close when walking >15 studs away]`
+* **So that** `[UI state stays synced with my physical location]`
 
 ---
 

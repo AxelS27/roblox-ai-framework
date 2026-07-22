@@ -18,6 +18,10 @@ graph TD
     E --> F[Bind UI/FX or CollectionService Components]
 ```
 
+### Step 0: Read Relevant Local Specialist Skills (`.agents/skills/`)
+1. Identify all engineering domains involved in this feature (e.g. `software-architect`, `roblox-engineer`, `ui-designer`, `backend-engineer`, `security-engineer`, `performance-engineer`).
+2. Use `view_file` (with `IsSkillFile = true`) to read the corresponding `.agents/skills/<domain-name>/SKILL.md` instruction file(s) before writing any code.
+
 ### Step 1: Define Configs & Types
 1. If the feature requires data schemas, declare them in `src/shared/Types/SharedTypes.luau`.
 2. Add any balance values or settings to `src/shared/Configs/GameConstants.luau` or a dedicated config file under `Configs/`.

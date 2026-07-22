@@ -1,3 +1,0 @@
-1. Game Development Documents: Core Systems, Game Mechanics
-2. Individual Specialist Skill: UI Skill, Map Design Skill, Model Skill, Architecture, Coding skills (Anti-hack, OOP), Database skills
-3. 

@@ -2,10 +2,57 @@
 
 ---
 
-## 👥 User Story
-* **As a** `[Player / Role]`
-* **I want to** `[navigate / explore / interact in this specific map environment]`
-* **So that** `[I experience engaging gameplay with high cover density, atmospheric lighting, and dynamic environment events]`
+## 👥 User Stories (Target 10+ entries from diverse POVs, states & conditions)
+
+### Story 1: Explorer / First-Time Player POV
+* **As an** `[Explorer / New Player]`
+* **I want to** `[easily locate safe spawn zones, key landmarks, and navigation cues]`
+* **So that** `[I can navigate without getting lost]`
+
+### Story 2: Combat & Stealth Player POV
+* **As a** `[Combat / Stealth Player]`
+* **I want to** `[utilize high cover density, choke points, and basalt pillars]`
+* **So that** `[I can set up ambushes or evade attackers]`
+
+### Story 3: Mobile Device Player POV
+* **As a** `[Mobile / iPad Player]`
+* **I want to** `[have clear camera visibility and unobstructed view paths]`
+* **So that** `[tight foliage or walls don't block my touch interaction]`
+
+### Story 4: Dynamic World Event Condition
+* **As a** `[Player in Late-Match Event]`
+* **I want to** `[see visual/audio atmospheric cues during volcanic eruptions or weather changes]`
+* **So that** `[I can react to environmental hazards in time]`
+
+### Story 5: Resource Harvesting Condition
+* **As a** `[Forager / Resource Collector]`
+* **I want to** `[find flora nodes and carcass props scattered across biomes]`
+* **So that** `[I can maintain my vitals and gain evolution XP]`
+
+### Story 6: Night / Low-Light Environment State
+* **As a** `[Nocturnal Species]`
+* **I want to** `[benefit from dark lighting aesthetics and bioluminescent landmarks]`
+* **So that** `[night gameplay feels distinct and atmospheric]`
+
+### Story 7: Territory & Nest Building Condition
+* **As a** `[Nest Builder / Pack Leader]`
+* **I want to** `[claim defensible sub-locations with natural barriers]`
+* **So that** `[our nest is protected from rival packs]`
+
+### Story 8: High Speed / Flight Locomotion State
+* **As a** `[Flying / High-Speed Species]`
+* **I want to** `[have open skyways and clear vertical airspace]`
+* **So that** `[I can fly smoothly without clipping terrain geometry]`
+
+### Story 9: Social & Trading Interaction State
+* **As a** `[Trader / Social Player]`
+* **I want to** `[access physical safe-zone interaction booths and ProximityPrompts]`
+* **So that** `[I can trade securely without threat of attack]`
+
+### Story 10: Performance & Low-End Device Condition
+* **As a** `[Low-End Mobile Player]`
+* **I want to** `[experience optimized spatial audio and instance streaming on this map]`
+* **So that** `[my frame rate remains smooth without severe lag]`
 
 ---
 
