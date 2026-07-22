@@ -60,7 +60,7 @@ graph TD
      * **Phase 3: UI Screens & HUD Visual Layout Staging (1 Task per UI Component Spec)**:
        - Separate staging tasks for every UI spec file in `ui_ux/components/` (Survival HUD with Mobile/iPad Touch Action Buttons layout, Evolution Tree Menu, Territory Panel, Shop & Emote Wheel Menu, Toast Notifications & Overhead Cards, Preloader & Loading Screen). (Note: NO custom leaderboard UI; use Roblox native top-right `leaderstats`).
      * **Phase 4: Gameplay Systems & Backend Services (1 Task per System Domain)**:
-       - Separate Luau implementation tasks for: Core Bootstrappers & Net Remotes, Native Roblox Leaderstats (`Player.leaderstats` folder with DNA, Kills, Species), Cross-Platform Mobile & Touch Input Controller, Vitals Engine & Ecosystem Spawner, Evolution & Mutation System, Action Combat & Skill Engine, Dynamic World Events & Bosses, Hunting Party & Nest Territory Buffs, Dynamic Species Camera Controller, Spatial Audio & Biome Soundscape System, Client VFX & Particle Emitter Controller, and DataStore ProfileService & DevProduct/Gamepass Verification.
+       - Separate Luau implementation tasks for: Core Bootstrappers & Net Remotes, Native Roblox Leaderstats (`Player.leaderstats` folder with DNA, Kills, Species), Interactive Starter Tutorial & Onboarding Controller (`TutorialEngine.luau` with 3-5 step onboarding quest & DataStore persistence), Cross-Platform Mobile & Touch Input Controller, Vitals Engine & Ecosystem Spawner, Evolution & Mutation System, Action Combat & Skill Engine, Dynamic World Events & Bosses, Hunting Party & Nest Territory Buffs, Dynamic Species Camera Controller, Spatial Audio & Biome Soundscape System, Client VFX & Particle Emitter Controller, and DataStore ProfileService & DevProduct/Gamepass Verification.
      * **Phase 5: Mock Multiplayer Bot Integration**:
        - Final Task: `MockPlayerService` autonomous bot simulation suite (10-20 bots, state machine, stress testing with zero errors in Studio).
   5. Create individual task files at `tasks/XXX-name.md` following [task-blueprint.md.template](file:///d:/Experiments/Roblox%20AI%20Framework/tasks/task-blueprint.md.template).
@@ -78,13 +78,13 @@ graph TD
 * **Procedure**:
   1. **Update Status to In Progress**: Mark status to `🟡 In Progress` in `tasks/README.md` and `tasks/XXX-name.md`.
   2. **Read Task Requirements & Relevant Local Skills**: Read the target task file completely. Identify the domain of the task (e.g., Level Design, UI Design, Security, Backend, Roblox Engine, Software Architecture) and ALWAYS read the corresponding local skill instruction file inside `.agents/skills/<domain-name>/SKILL.md` using `view_file` (with `IsSkillFile = true`) before writing or modifying code.
-  3. **Execute Code Changes**: Modify or create target Luau modules in `src/`.
-  4. **Professional SE Testing Protocol**:
-     * **Unit/Integration Testing**: Run Luau unit testing scripts in Roblox Studio using MCP `execute_luau`.
-     * **Visual & Scene Hierarchy Checks**: Inspect `StarterGui` or `Workspace` via tree search tools to verify staged UI and physical map assets.
-     * **Roblox Studio Console Log Audit**: Trigger playtesting via MCP `start_stop_play` (if testing runtime logic), wait 3-5 seconds, and invoke MCP `get_console_output` to retrieve recent logs.
-     * **Zero-Error Invariant Constraint**: The captured console logs **MUST contain exactly 0 red error traces or warn stack traces** originating from the modified or created modules. If errors are found, the task is NOT complete; revert status, fix code, and re-test.
-  5. **Mark Completed**: Update status to `🟢 Completed` in both `tasks/README.md` and the task file.
+  3. **Execute Code Changes (Strict Non-Truncated Implementation)**: Modify or create target Luau modules in `src/`. Enforce **Constraint 20 (Anti-Shortcut Invariant)**: NEVER write placeholder comments (such as `-- TODO: remaining logic` or `-- ... rest of code`), NEVER compress or summarize logic, and NEVER skip specified parameters. Write 100% full, production-grade Luau code step-by-step.
+  4. **Professional SE Testing Protocol & 3-Point Quality Audit**:
+     * **Point 1: Visual Polish & Animation Check**: Verify `ThemeManager` glassmorphism, HSL progress gradients, and `UIAutoBinder`/`UIAnimate` hover scale and stroke animations are active on all UI components. Verify non-flat topography and atmospheric lighting on maps.
+     * **Point 2: End-to-End System Connectivity**: Verify button clicks fire `Net` remotes and trigger real server state changes (saving data, updating leaderstats, spawning physical items).
+     * **Point 3: Console & Hierarchy Audit**: Run unit tests / playtest scripts in Roblox Studio using MCP `execute_luau`. Verify **exactly 0 red error traces or warn stack traces**.
+     * **Zero-Error Invariant Constraint**: If errors are found, or if UI is non-functional/un-animated, the task is NOT complete; revert status, fix code, and re-test.
+  5. **Mark Completed**: Update status to `🟢 Completed` in both `tasks/README.md` and the task file only upon passing the 3-Point Quality Audit.
   6. **Report**: Summarize completed work, paste the clean console log snippet as proof of verification, and highlight the next task in queue.
 
 ---

@@ -86,24 +86,26 @@ To prevent custom elements from clashing with native Roblox systems:
 
 ---
 
-## 🎬 4. Shared UI Animation Utility (UIAnimate)
-All client controllers must use the shared [UIAnimate](file:///d:/Experiments/Roblox%20AI%20Framework/src/shared/Utilities/UIAnimate.luau) utility module to apply premium animations instead of writing local TweenService scripts:
+## 🎬 4. Shared UI Animation & Auto-Binder Utilities (`UIAnimate` & `UIAutoBinder`)
+All client controllers must use `UIAutoBinder` and `UIAnimate` to apply modern animations and glassmorphic styling automatically:
 
 ```luau
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local UIAutoBinder = require(ReplicatedStorage.Shared.Utilities.UIAutoBinder)
+local ThemeManager = require(ReplicatedStorage.Shared.Utilities.ThemeManager)
 local UIAnimate = require(ReplicatedStorage.Shared.Utilities.UIAnimate)
 
--- 1. Hover & Click Elastic Bouncing on a button
-local cleanup = UIAnimate.bindHoverScale(button, 1.15, 0.85)
+-- 1. Automatic 1-line ScreenGui Decoration (Injects Glassmorphism, UICorner, UIStroke, Animations, Sounds)
+UIAutoBinder.decorate(screenGui, "DarkGlass")
 
--- 2. Button UIStroke Scale or Visibility on hover
-local cleanupStroke = UIAnimate.bindStrokeScale(button, button.UIStroke)
+-- 2. Automatic 1-line Button Binding (Decoration + Sound + Action Callback)
+UIAutoBinder.bindButton(shopButton, function()
+    print("Shop Button Clicked!")
+    UIAnimate.bounce(shopWindowFrame, originalSize, true)
+end)
 
--- 3. Dynamic PopIn/PopOut frame transitions
-local isOpen = true
-UIAnimate.bounce(frame, originalFrameSize, isOpen) -- Elastic bouncy pop
--- Or: UIAnimate.popup(frame, originalFrameSize, isOpen) -- Standard smooth pop
--- Or: UIAnimate.rotateIn(frame, originalFrameSize, 15, isOpen) -- Slanted spin in
+-- 3. High-Contrast Progress Bar Fill Gradient
+ThemeManager.applyBarGradient(healthBarFillFrame, "Health")
 ```
 
 ---
